@@ -30,5 +30,13 @@
                 "bower-asset-library": "dist/vendor/bower"
             }
         }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "if [ ! -d 'dist/runtime' ]; then mkdir 'dist/runtime'; fi",
+            "if [ ! -d 'dist/assets' ]; then mkdir 'dist/assets'; fi",
+            "if [  -d 'dist/runtime' ]; then chmod 777 -R 'dist/runtime'; fi",
+            "if [  -d 'dist/assets' ]; then chmod 777 -R 'dist/assets'; fi"
+        ]
     }
 }
