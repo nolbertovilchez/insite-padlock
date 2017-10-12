@@ -6,13 +6,18 @@
         {
             "type": "git",
             "url": "https://github.com/nolbertovilchez/upch-yii2-gii"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/nolbertovilchez/upch-yii2-theme"
         }
     ],
     "require": {
         "yiisoft/yii2": "^2.0",
         "yiisoft/yii2-gii": "^2.0",
         "yiisoft/yii2-debug": "^2.0",
-        "upch/yii2-gii": "dev-master"
+        "upch/yii2-gii": "dev-master",
+        "upch/yii2-theme": "dev-master"
     },
     "authors": [
         {
