@@ -1,24 +1,59 @@
 import gulp from 'gulp';
+import path from 'path';
 import phpmin from 'gulp-php-minify';
 import browserSync from 'browser-sync';
 
-let bsync = browserSync.create();
+var reload = browserSync.reload;
 
-gulp.task('php', (cb) => {
-    return gulp.src(['./src/backend/**/*.php'])
-            .pipe(phpmin({silent: true}))
-            .pipe(gulp.dest('./dist/'));
+var fx_php = (cb, src, dest) => {
+	return gulp.src(src)
+		.pipe(phpmin({ silent: true }))
+		.pipe(gulp.dest(dest))
+		.pipe(reload({ stream: true }));
+};
+
+var backslash2slash = (_uri) => path.normalize(_uri).replace(new RegExp('[\\\\]+', 'gi'), '/');
+
+var _getDestPath = (pathFile) => {
+	let _path = path.resolve(__dirname, './');
+	var regex_str = backslash2slash(_path) + '\\/src/backend(\\/)*';
+	var regex = new RegExp(regex_str, 'gi');
+	var dir = path.dirname(backslash2slash(pathFile).replace(regex, './dist/'));
+	return dir;
+};
+
+gulp.task('web', () => {
+	return gulp.src(['./src/**/web/**/*', '!./src/**/web/**/scripts', '!./src/**/web/**/styles'])
+		.pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('php-watch', ["php"], (done) => {
-    bsync.reload();
-    done();
+gulp.task('php', (cb) => fx_php(cb, ['./src/backend/**/*.php'], './dist/'));
+
+gulp.task('php-watch', () => {
+	gulp.watch(['./src/backend/**/*.php'], (cb) => {
+		let dest = _getDestPath(cb.path);
+		fx_php(cb, cb.path, dest);
+	});
 });
 
-gulp.task('server',["php"],() => {
-    bsync.init({
-        proxy: "localhost/v3/upch-padlock/dist",
-    });
-
-    gulp.watch(['./src/backend/**/*.php'], ['php-watch']);
+gulp.task('browser-sync', () => {
+	browserSync({
+		proxy: {
+			target: "upch-padlock.dev"
+		},
+		port: 81,
+		open: false,
+		notify: true
+	});
 });
+
+gulp.task('default', [
+	'php',
+	'web',
+	'browser-sync',
+	'php-watch'
+], () => {
+	console.log(path.resolve(__dirname, './'), "resuelto");
+	console.log(__dirname, "dirname");
+});
+
