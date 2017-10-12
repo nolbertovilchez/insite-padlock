@@ -34,9 +34,10 @@
     "scripts": {
         "post-update-cmd": [
             "if [ ! -d 'dist/runtime' ]; then mkdir 'dist/runtime'; fi",
-            "if [ ! -d 'dist/assets' ]; then mkdir 'dist/assets'; fi",
+            "if [ ! -d 'dist/web' ]; then mkdir 'dist/web'; fi",
+            "if [ ! -d 'dist/web/assets' ]; then mkdir 'dist/web/assets'; fi",
             "if [  -d 'dist/runtime' ]; then chmod 777 -R 'dist/runtime'; fi",
-            "if [  -d 'dist/assets' ]; then chmod 777 -R 'dist/assets'; fi"
+            "if [  -d 'dist/web/assets' ]; then chmod 777 -R 'dist/web/assets'; fi"
         ]
     }
 }

@@ -23,7 +23,7 @@ var _getDestPath = (pathFile) => {
 };
 
 gulp.task('web', () => {
-    return gulp.src(['./src/**/web/**/*', '!./src/**/web/**/scripts', '!./src/**/web/**/styles'])
+    return gulp.src(['./src/**/web/**/*', './src/**/web/**/.htaccess', '!./src/**/web/**/scripts', '!./src/**/web/**/styles'])
             .pipe(gulp.dest('./dist/'));
 });
 
