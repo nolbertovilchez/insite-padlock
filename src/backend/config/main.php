@@ -14,12 +14,15 @@ $config = [
         ],
     ],
     'components' => [
-        'view' => [
-             'theme' => [
-                 'pathMap' => [
+        'view'         => [
+            'theme' => [
+                'pathMap' => [
                     '@app/views' => '@vendor/upch/theme-padlock'
-                 ],
-             ],
+                ],
+            ],
+        ],
+        'assetManager' => [
+            'linkAssets' => true,
         ],
         'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -52,7 +55,7 @@ $config = [
             ],
         ],
         'db'           => $db,
-        'urlManager' => [
+        'urlManager'   => [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
             'rules'           => [
