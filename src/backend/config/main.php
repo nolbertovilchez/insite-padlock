@@ -14,6 +14,13 @@ $config = [
         ],
     ],
     'components' => [
+        'view' => [
+             'theme' => [
+                 'pathMap' => [
+                    '@app/views' => '@vendor/upch/theme-padlock'
+                 ],
+             ],
+        ],
         'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'nolberto',
