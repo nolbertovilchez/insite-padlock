@@ -16,7 +16,7 @@
             "email": "jnolbertovm@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "config": {
         "process-timeout": 1800,
         "vendor-dir": "dist/vendor",
