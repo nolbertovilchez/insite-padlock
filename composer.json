@@ -2,7 +2,7 @@
     "name": "insite/padlock",
     "description": "Proyecto Padlock",
     "type": "project",
-    "licence": "LGPL",
+    "license": "LGPL",
     "require": {
         "yiisoft/yii2": "^2.0",
         "yiisoft/yii2-gii": "^2.0",
