@@ -1,28 +1,28 @@
 {
-    "name": "upch/padlock",
+    "name": "insite/padlock",
     "description": "Proyecto Padlock",
     "type": "project",
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/nolbertovilchez/upch-yii2-gii"
+            "url": "https://github.com/nolbertovilchez/insite-yii2-gii"
         },
         {
             "type": "git",
-            "url": "https://github.com/nolbertovilchez/upch-theme-padlock"
+            "url": "https://github.com/nolbertovilchez/insite-theme-padlock"
         },
         {
             "type": "git",
-            "url": "https://github.com/nolbertovilchez/upch-yii2-asset"
+            "url": "https://github.com/nolbertovilchez/insite-yii2-asset"
         }
     ],
     "require": {
         "yiisoft/yii2": "^2.0",
         "yiisoft/yii2-gii": "^2.0",
         "yiisoft/yii2-debug": "^2.0",
-        "upch/yii2-gii": "dev-master",
-        "upch/theme-padlock": "dev-master",
-        "upch/yii2-asset": "dev-master"
+        "insite/yii2-gii": "dev-master",
+        "insite/theme-padlock": "dev-master",
+        "insite/yii2-asset": "dev-master"
     },
     "authors": [
         {
