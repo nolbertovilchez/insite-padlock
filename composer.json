@@ -34,7 +34,8 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php mkdir.php"
+            "php mkdir.php",
+	    "npm install"
         ]
     }
 }

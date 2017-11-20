@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Proyecto Padlock",
   "main": "index.js",
-  "scripts": {
-    "postinstall": "composer install"
-  },
   "author": "José Nolberto Vilchez Moreno <jnolbertovm@gmail.com>",
   "license": "LGPL",
   "devDependencies": {
