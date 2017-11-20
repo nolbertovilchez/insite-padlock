@@ -34,7 +34,7 @@
         }
     },
     "scripts": {
-        "post-install-cmd": [
+        "post-create-project-cmd": [
             "php mkdir.php",
             "npm install"
         ]
