@@ -1,18 +1,14 @@
 {
-    "name": "upch/padlock",
+    "name": "insite/padlock",
     "description": "Proyecto Padlock",
     "type": "project",
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/nolbertovilchez/upch-yii2-gii"
-        }
-    ],
+    "license": "LGPL",
     "require": {
         "yiisoft/yii2": "^2.0",
         "yiisoft/yii2-gii": "^2.0",
         "yiisoft/yii2-debug": "^2.0",
-        "upch/yii2-gii": "dev-master"
+        "insite/yii2-gii": "dev-master",
+        "insite/yii2-theme-espire": "dev-master"
     },
     "authors": [
         {
@@ -20,7 +16,7 @@
             "email": "jnolbertovm@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "config": {
         "process-timeout": 1800,
         "vendor-dir": "dist/vendor",
@@ -29,6 +25,11 @@
                 "npm-asset-library": "dist/vendor/npm",
                 "bower-asset-library": "dist/vendor/bower"
             }
+        }
+    },
+    "extra":{
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
         }
     },
     "scripts": {
