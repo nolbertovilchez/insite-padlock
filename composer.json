@@ -33,13 +33,8 @@
         }
     },
     "scripts": {
-        "post-update-cmd": [
-            "upch\\config\\Scripts::ReqPaths"
+        "post-install-cmd": [
+            "php mkdir.php"
         ]
-    },
-    "autoload": {
-        "psr-4": {
-            "upch\\config\\": "dist/components"
-        }
     }
 }
