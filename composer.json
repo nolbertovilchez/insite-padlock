@@ -17,6 +17,7 @@
         }
     ],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "process-timeout": 1800,
         "vendor-dir": "dist/vendor",
@@ -27,7 +28,7 @@
             }
         }
     },
-    "extra":{
+    "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
         }
@@ -35,7 +36,7 @@
     "scripts": {
         "post-install-cmd": [
             "php mkdir.php",
-	    "npm install"
+            "npm install"
         ]
     }
 }
