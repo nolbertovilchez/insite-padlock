@@ -30,6 +30,5 @@
     Y para finalizar se reinicia el apache: `sudo service apache2 restart`
 
 ### Instalando la aplicacion
-1.  **Clonar repositorio** `git clone https://github.com/InSitePe/padlock.git`
-2.  **Instalar node modules y vendor** `npm install`
-3.  **Iniciar servidor con gulp** `gulp`
+**Crear project** `composer create-project insite/padlock padlock -s dev`
+
