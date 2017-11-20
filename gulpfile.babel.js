@@ -39,7 +39,7 @@ gulp.task('php-watch', () => {
 gulp.task('browser-sync', () => {
     browserSync({
         proxy: {
-            target: "upch-padlock.dev/web"
+            target: "padlock.dev"
         },
         open: false,
         notify: true

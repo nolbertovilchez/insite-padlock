@@ -17,7 +17,7 @@ $config = [
         'view'         => [
             'theme' => [
                 'pathMap' => [
-                    '@app/views' => '@vendor/upch/theme-padlock'
+                    '@app/views' => '@vendor/insite/yii2-theme-espire'
                 ],
             ],
         ],
