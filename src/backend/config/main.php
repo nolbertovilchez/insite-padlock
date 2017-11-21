@@ -1,18 +1,16 @@
 <?php
 
-$params = require(__DIR__ . '/params.php');
-$db     = require(__DIR__ . '/db.php');
-Yii::setAlias('@src', __DIR__ . '/../../src/backend/');
+$params  = require(__DIR__ . '/params.php');
+$db      = require(__DIR__ . '/db.php');
+$modules = require(__DIR__ . '/modules.php');
+$aliases = require(__DIR__ . '/aliases.php');
 
 $config = [
     'id'         => 'padlock',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
-    'modules'    => [
-        'cuenta' => [
-            'class' => 'app\modules\cuenta\CuentaModule',
-        ],
-    ],
+    'modules'    => $modules,
+    'aliases'    => $aliases,
     'components' => [
         'view'         => [
             'theme' => [
@@ -78,7 +76,7 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class'      => 'yii\gii\Module',
         'generators' => [
-            'modules' => 'upch\gii\module\Generator'
+            'modules' => 'insite\gii\module\Generator'
         ],
     ];
 }

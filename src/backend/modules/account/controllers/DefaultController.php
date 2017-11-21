@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\cuenta\controllers;
+namespace app\modules\account\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `cuenta` module
+ * Default controller for the `account` module
  */
 class DefaultController extends Controller
 {
