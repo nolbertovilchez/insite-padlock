@@ -1,55 +1,21 @@
 import gulp from 'gulp';
-import path from 'path';
-import phpmin from 'gulp-php-minify';
-import browserSync from 'browser-sync';
+import config from './gulp/config.gulp';
 
-var reload = browserSync.reload;
+config.isProd = false;
 
-var fx_php = (cb, src, dest) => {
-    return gulp.src(src)
-            .pipe(phpmin({silent: true}))
-            .pipe(gulp.dest(dest))
-            .pipe(reload({stream: true}));
-};
+var tasks = require('./gulp/tasks.gulp')(gulp, config);
 
-var backslash2slash = (_uri) => path.normalize(_uri).replace(new RegExp('[\\\\]+', 'gi'), '/');
+tasks.init();
 
-var _getDestPath = (pathFile) => {
-    let _path = path.resolve(__dirname, './');
-    var regex_str = backslash2slash(_path) + '\\/src/backend(\\/)*';
-    var regex = new RegExp(regex_str, 'gi');
-    var dir = path.dirname(backslash2slash(pathFile).replace(regex, './dist/'));
-    return dir;
-};
-
-gulp.task('web', () => {
-    return gulp.src(['./src/**/web/**/*', './src/**/web/**/.htaccess', '!./src/**/web/**/scripts', '!./src/**/web/**/styles'])
-            .pipe(gulp.dest('./dist/'));
-});
-
-gulp.task('php', (cb) => fx_php(cb, ['./src/backend/**/*.php'], './dist/'));
-
-gulp.task('php-watch', () => {
-    gulp.watch(['./src/backend/**/*.php'], (cb) => {
-        let dest = _getDestPath(cb.path);
-        fx_php(cb, cb.path, dest);
-    });
-});
-
-gulp.task('browser-sync', () => {
-    browserSync({
-        proxy: {
-            target: "padlock.dev"
-        },
-        open: false,
-        notify: true
-    });
-});
-
-gulp.task('default', [
-    'php',
-    'web',
-    'browser-sync',
-    'php-watch'
+gulp.task('init', [
+    'backend',
+    'frontend'
 ]);
 
+//DEV
+gulp.task('default', [
+    'clean',
+    'build',
+    'js',
+    'watch'
+]);
