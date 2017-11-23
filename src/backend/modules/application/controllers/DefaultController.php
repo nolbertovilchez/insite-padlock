@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\account\controllers;
+namespace app\modules\application\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `account` module
+ * Default controller for the `applications` module
  */
 class DefaultController extends Controller
 {
@@ -14,10 +14,6 @@ class DefaultController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-        return $this->render('index');
-    }
-    public function actionCreate()
     {
         return $this->render('index');
     }
