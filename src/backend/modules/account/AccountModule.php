@@ -2,6 +2,8 @@
 
 namespace app\modules\account;
 
+use app\assets\AppAsset;
+
 /**
  * account module definition class
  */
