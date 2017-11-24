@@ -53,7 +53,7 @@
                 pagination: true,
                 pageSize: 10,
                 idField: 'id',
-                url: '/application/' + type + '/list',
+                url: moduleUrl + '/' + type + '/list',
                 columns: columns()
             });
         }
@@ -91,7 +91,7 @@
 
     var update_application = function (data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
-        $.post('/application/manage/update', data, function (response) {
+        $.post(controllerUrl + '/update', data, function (response) {
             if (!response.error) {
                 btn.prop({disabled: false}).html('Actualizar');
                 noty({type: 'success', text: response.message, timeout: 1000}).show();
@@ -128,7 +128,7 @@
     });
     var create_partial = function (type, mdCreate, table, data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
-        $.post('/application/' + type + '/save', data, function (response) {
+        $.post(moduleUrl + '/' + type + '/save', data, function (response) {
             console.log("POST");
             if (!response.error) {
                 mdCreate.find('#form-create-' + type + ' input').val('').removeClass('valid');

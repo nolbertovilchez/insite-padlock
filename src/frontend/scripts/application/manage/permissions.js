@@ -35,16 +35,16 @@
     var _action_buttons = function (value, row, index) {
         if (row.type == "own") {
             return [
-                "<button class='btn btn-sm btn-danger own'><i class='fa fa-arrow-right'></i></button>"
+                "<button class='btn btn-sm btn-danger own'><i class='fa fa-arrow-left'></i></button>"
             ].join('');
         } else if (row.type == "available") {
             return [
-                "<button class='btn btn-sm btn-success available'><i class='fa fa-arrow-left'></i></button>"
+                "<button class='btn btn-sm btn-success available'><i class='fa fa-arrow-right'></i></button>"
             ].join('');
         }
     };
     var _action_remove = function (e, value, row, index) {
-        $.post('/application/permissions/remove', row, function (response) {
+        $.post(moduleUrl+'/permissions/remove', row, function (response) {
             if (!response.error) {
                 noty({type: 'success', text: response.message, timeout: 1000}).show();
                 var unique = $tbOwn.bootstrapTable('getRowByUniqueId', row.id);
@@ -60,7 +60,7 @@
     };
 
     var _action_add = function (e, value, row, index) {
-        $.post('/application/permissions/add', row, function (response) {
+        $.post(moduleUrl+'/permissions/add', row, function (response) {
             if (!response.error) {
                 noty({type: 'success', text: response.message, timeout: 1000}).show();
                 $tbAvailable.bootstrapTable('removeByUniqueId', row.id);
@@ -88,7 +88,7 @@
                 pageSize: 10,
                 idField: 'id',
                 uniqueId: 'id',
-                url: '/application/permissions/list_role_own?id=' + role,
+                url: moduleUrl+'/permissions/list_role_own?id=' + role,
                 columns: columns()
             });
             $tbAvailable.bootstrapTable("destroy");
@@ -100,7 +100,7 @@
                 pageSize: 10,
                 idField: 'id',
                 uniqueId: 'id',
-                url: '/application/permissions/list_role_available?id=' + role,
+                url: moduleUrl+'/permissions/list_role_available?id=' + role,
                 columns: columns()
             });
         }

@@ -1,8 +1,6 @@
 (function ($) {
     'use-strict';
 
-//    var $moduleUrl = (Request.Host + Request.BaseUrl + "/" + Request.UrlHash.m);
-//    var $controlerUrl = $moduleUrl + "/" + Request.UrlHash.c;
     var $table = $('#tbApplications');
     var $btnAddApplication = $('#add-application');
     var $modalAddApplication = $('#md-manage-create-application');
@@ -30,7 +28,7 @@
 
     var create_application = function (data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
-        $.post('/application/manage/save', data, function (response) {
+        $.post(controllerUrl + '/save', data, function (response) {
             if (!response.error) {
                 $modalAddApplication.find('#form-create-application input').val('').removeClass('valid');
                 btn.prop({disabled: false}).html('Guardar');
@@ -38,7 +36,7 @@
                 $modalAddApplication.modal('hide');
                 noty({type: 'success', text: 'Aplicación creada con éxito', timeout: 1000}).show();
                 setTimeout(function () {
-                    location.href = '/application/manage/edit/id/' + response.data.id;
+                    location.href = controllerUrl + '/edit/id/' + response.data.id;
                 }, 1000);
             }
         }, "json").fail(function (xhr, status, error) {
@@ -97,7 +95,7 @@
         pagination: true,
         pageSize: 10,
         idField: 'id',
-        url: '/application/manage/list',
+        url: controllerUrl + '/list',
         columns: columns()
     });
 
