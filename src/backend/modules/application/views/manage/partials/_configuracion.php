@@ -28,12 +28,12 @@
 <div class="form-group row">
     <label for="form-1-1" class="col-md-3 control-label">Configuracion 1</label>
     <div class="col-md-9">
-        <input type="text" class="form-control" name="secret_app" readonly="true">
+        <input type="text" class="form-control width-10" name="setting[]">
     </div>
 </div>
 <div class="form-group row">
     <label for="form-1-1" class="col-md-3 control-label">Configuracion 1</label>
     <div class="col-md-9">
-        <input type="text" class="form-control" name="secret_app" readonly="true">
+        <input type="text" class="form-control width-10" name="setting[]">
     </div>
 </div>

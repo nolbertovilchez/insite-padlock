@@ -33,7 +33,7 @@ class ApplicationAsset {
             "css"     => [],
             "depends" => [],
         ],
-        "manage.update" => [
+        "manage.edit" => [
             "js"      => ["manage/update"],
             "css"     => [],
             "depends" => [],

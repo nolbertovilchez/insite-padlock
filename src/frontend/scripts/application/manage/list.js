@@ -38,8 +38,13 @@
                 $modalAddApplication.modal('hide');
                 noty({type: 'success', text: 'Aplicación creada con éxito', timeout: 1000}).show();
                 setTimeout(function () {
-                    location.href = '/application/manage/update/id/' + response.data.id;
+                    location.href = '/application/manage/edit/id/' + response.data.id;
                 }, 1000);
+            }
+        }, "json").fail(function (xhr, status, error) {
+            if (xhr.status != 200) {
+                noty({type: 'error', text: xhr.responseText, timeout: 1000}).show();
+                btn.prop({disabled: false}).html('Guardar');
             }
         });
     };
