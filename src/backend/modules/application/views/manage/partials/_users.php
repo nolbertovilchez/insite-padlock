@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="text-right">
-            <button href="#" class="btn btn-default" id="add-user">
+            <button href="#" class="btn btn-default btnAddPartial" data-id="users">
                 <i class="fa fa-plus"></i> 
                 Nuevo Usuario
             </button>
@@ -23,3 +23,4 @@
         </div>
     </div>
 </div>
+<?= $this->render("/manage/modals/create_user"); ?>

@@ -9,6 +9,7 @@
 namespace app\modules\application\controllers;
 
 use yii\web\Controller;
+use yii\base\Exception;
 use app\modules\application\components\QApplication;
 use app\components\JSON;
 use app\components\Utils;
@@ -35,5 +36,10 @@ class RolesController extends Controller {
         }
     }
 
-    //put your code here
+    public function actionSave() {
+        $nombre = Yii::$app->request->post("nombre");
+
+        Utils::show($nombre);
+    }
+
 }
