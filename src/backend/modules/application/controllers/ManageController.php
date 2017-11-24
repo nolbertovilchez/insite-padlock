@@ -14,14 +14,15 @@ use Yii;
  */
 class ManageController extends Controller {
 
-    public $section_title = "Applications";
+    public $section_title = "Aplicaciones";
+    public $current_title = "";
 
     /**
      * Renders the index view for the module
      * @return string
      */
     public function actionIndex() {
-//        $this->current_title = "Listado";
+        $this->current_title = "Listado";
         return $this->render('index');
     }
 
@@ -57,8 +58,13 @@ class ManageController extends Controller {
             if (!Yii::$app->request->isAjax) {
                 throw new Exception("El metodo no esta permitido", 403);
             }
-            $id     = Yii::$app->request->post("id");
-            $nombre = Yii::$app->request->post("nombre");
+            $id   = Yii::$app->request->post("id");
+            $type = Yii::$app->request->post("type");
+            if ($type == "general") {
+                $nombre = Yii::$app->request->post("nombre");
+            } elseif ($type == "setting") {
+                
+            }
 
             JSON::response(FALSE, 200, "Aplicación actualizada con éxito", []);
         } catch (Exception $ex) {
@@ -69,9 +75,9 @@ class ManageController extends Controller {
     public function actionEdit() {
         $id = Yii::$app->request->get("id");
 
-        $data['NAME_APP'] = "NOMBRE_APP";
-        $data['ID_APP']   = $id;
-//        $this->current_title = "Listado";
+        $data['NAME_APP']    = "NOMBRE_APP";
+        $data['ID_APP']      = $id;
+        $this->current_title = $data['NAME_APP'];
         return $this->render('update', ["data" => $data]);
     }
 

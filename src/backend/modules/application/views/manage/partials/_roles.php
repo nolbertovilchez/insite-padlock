@@ -1,25 +1,21 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="text-right">
-            <button href="#" class="btn btn-default btnAddPartial" data-id="roles">
+        <div class="text-left">
+            <button href="#" class="btn btn-info btnAddPartial" data-id="roles">
                 <i class="fa fa-plus"></i> 
                 Nuevo Rol
             </button>
         </div>
-        <div class="card">
-            <div class="card-block">
-                <div class="table-overflow">
-                    <table class="table table-hover table-lg" id="tb-roles">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
+        <div class="table-overflow">
+            <table class="table table-hover table-lg" id="tb-roles">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>

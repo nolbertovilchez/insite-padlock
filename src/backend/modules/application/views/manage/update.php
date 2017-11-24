@@ -1,7 +1,7 @@
+<div class="page-title">
+    <h4><?= $this->context->section_title ?> <i class="fa fa-angle-double-right"></i> <small><?= $this->context->current_title ?></small></h4> 
+</div>
 <div class="card">
-    <div class="padding-20">
-        <h4 class="card-title no-mrg-btm"><?= $data['NAME_APP'] ?></h4>
-    </div>
     <div class="tab-info">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
@@ -17,7 +17,7 @@
                 <a href="#card-tab-4" class="nav-link tabApplications" data-id='actions' data-list='true' role="tab" data-toggle="tab" aria-expanded="false">Acciones</a>
             </li>
             <li class="nav-item">
-                <a href="#card-tab-5" class="nav-link tabApplications" data-id='permissions' data-list='true' role="tab" data-toggle="tab" aria-expanded="false">Permisos</a>
+                <a href="#card-tab-5" class="nav-link tabApplications" data-id='permissions' data-list='false' role="tab" data-toggle="tab" aria-expanded="false">Permisos</a>
             </li>
             <li class="nav-item">
                 <a href="#card-tab-6" class="nav-link tabApplications" data-id='users' data-list='true' role="tab" data-toggle="tab" aria-expanded="false">Usuarios</a>
