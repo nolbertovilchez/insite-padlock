@@ -1,10 +1,7 @@
 (function ($) {
     'use-strict';
-
     var $tabs = $(".tabApplications");
     var $btnAdd = $(".btnAddPartial");
-    var $btnUpdateGeneral = $("#actualizarGeneral");
-
     var columns = function () {
         return  [
             {
@@ -31,13 +28,11 @@
             }
         ];
     };
-
     var _action_buttons = function (value, row, index) {
         return [
             '<a>Editar</a>'
         ].join('');
     };
-
     var _action_edit = function (e, value, row, index) {
         var href = '';
         if (row.tipo == 'P') {
@@ -45,14 +40,11 @@
         }
         location.href = ' / ' + href;
     };
-
     $tabs.on("click", function () {
         var type = $(this).attr("data-id");
         var list = $(this).attr("data-list");
-
-        if (list) {
+        if (list === "true") {
             var table = $("#tb-" + type);
-
             table.bootstrapTable("destroy");
             table.bootstrapTable({
                 escape: false,
@@ -61,32 +53,45 @@
                 pagination: true,
                 pageSize: 10,
                 idField: 'id',
-                url: '/application/' + type + '/list',
+                url: moduleUrl + '/' + type + '/list',
                 columns: columns()
             });
         }
     });
 
-    $btnUpdateGeneral.on("click", function () {
-        $("#form-update-application").validate({
-            submitHandler: function (form) {
-                var btn = $(form).find('button[type=submit]');
-                var data = $(form).serialize();
-                update_application(data, btn);
-            },
-            rules: {
-                'nombre': {
-                    required: {
-                        message: 'Este campo debe ser llenado'
-                    },
-                }
+    $("#form-update-application").validate({
+        submitHandler: function (form) {
+            var btn = $(form).find('button[type=submit]');
+            var data = $(form).serialize() + '&type=general';
+            update_application(data, btn);
+        },
+        rules: {
+            'nombre': {
+                required: {
+                    message: 'Este campo debe ser llenado'
+                },
             }
-        });
+        }
+    });
+
+    $("#form-setting-application").validate({
+        submitHandler: function (form) {
+            var btn = $(form).find('button[type=submit]');
+            var data = $(form).serialize() + '&type=setting';
+            update_application(data, btn);
+        },
+        rules: {
+            'nombre': {
+                required: {
+                    message: 'Este campo debe ser llenado'
+                },
+            }
+        }
     });
 
     var update_application = function (data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
-        $.post('/application/manage/update', data, function (response) {
+        $.post(controllerUrl + '/update', data, function (response) {
             if (!response.error) {
                 btn.prop({disabled: false}).html('Actualizar');
                 noty({type: 'success', text: response.message, timeout: 1000}).show();
@@ -98,17 +103,14 @@
             }
         });
     };
-
     $btnAdd.on("click", function () {
         var type = $(this).attr("data-id");
         var mdCreate = $("#md-manage-create-" + type);
         var frmCreate = "#form-create-" + type;
         var table = $("#tb-" + type);
-
         mdCreate.find(frmCreate + ' input,select').val('').removeClass('valid').removeClass('error');
         mdCreate.find(frmCreate + ' label.error').remove();
         mdCreate.modal('show');
-
         mdCreate.find(frmCreate).validate({
             submitHandler: function (form) {
                 var btn = $(form).find('button[type=submit]');
@@ -123,12 +125,10 @@
                 }
             }
         });
-
     });
-
     var create_partial = function (type, mdCreate, table, data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
-        $.post('/application/' + type + '/save', data, function (response) {
+        $.post(moduleUrl + '/' + type + '/save', data, function (response) {
             console.log("POST");
             if (!response.error) {
                 mdCreate.find('#form-create-' + type + ' input').val('').removeClass('valid');
@@ -144,7 +144,5 @@
             }
         });
     };
-
-
 }(window.jQuery));
 

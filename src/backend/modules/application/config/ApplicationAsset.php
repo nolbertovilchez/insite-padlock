@@ -34,7 +34,7 @@ class ApplicationAsset {
             "depends" => [],
         ],
         "manage.edit" => [
-            "js"      => ["manage/update"],
+            "js"      => ["manage/update","manage/permissions"],
             "css"     => [],
             "depends" => [],
         ]

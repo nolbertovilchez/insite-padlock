@@ -1,3 +1,6 @@
+<div class="page-title">
+    <h4><?= $this->context->section_title ?> <i class="fa fa-angle-double-right"></i> <small><?= $this->context->current_title ?></small></h4> 
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="text-right">
