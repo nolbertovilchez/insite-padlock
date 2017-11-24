@@ -2,7 +2,7 @@
 
 namespace app\modules\application\controllers;
 
-use yii\web\Controller;
+use app\components\MainController;
 use yii\base\Exception;
 use app\modules\application\components\QApplication;
 use app\components\JSON;
@@ -12,10 +12,9 @@ use Yii;
 /**
  * Default controller for the `applications` module
  */
-class ManageController extends Controller {
+class ManageController extends MainController {
 
     public $section_title = "Aplicaciones";
-    public $current_title = "";
 
     /**
      * Renders the index view for the module

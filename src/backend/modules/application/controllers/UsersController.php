@@ -8,7 +8,7 @@
 
 namespace app\modules\application\controllers;
 
-use yii\web\Controller;
+use app\components\MainController;
 use yii\base\Exception;
 use app\modules\application\components\QApplication;
 use app\components\JSON;
@@ -20,7 +20,7 @@ use Yii;
  *
  * @author francisco
  */
-class UsersController extends Controller {
+class UsersController extends MainController {
 
     public function actionList() {
         try {
