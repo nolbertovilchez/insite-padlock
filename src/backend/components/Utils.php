@@ -39,4 +39,8 @@ class Utils {
         return $_GET[$nombreGet];
     }
 
+    public static function generateToken($value) {
+        return sha1(hash_hmac("sha1", $value, Constante::SECRET, true));
+    }
+
 }
