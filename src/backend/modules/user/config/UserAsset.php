@@ -33,8 +33,8 @@ class UserAsset {
             "css"     => [],
             "depends" => [],
         ],
-        "manage.update" => [
-            "js"      => ["manage/update"],
+        "manage.edit" => [
+            "js"      => ["manage/edit"],
             "css"     => [],
             "depends" => [],
         ]

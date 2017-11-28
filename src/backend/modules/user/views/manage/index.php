@@ -1,12 +1,6 @@
 <?php
 /* @var $this yii\web\View */
 ?>
-<h1>Usuarios</h1>
-
-<p>
-    Administración de usuarios por aplicación.
-</p>
-
 <div class="row">
     <div class="col-md-12">
         <div class="text-right">
@@ -18,17 +12,7 @@
         <div class="card">
             <div class="card-block">
                 <div class="table-overflow">
-                    <table class="table table-hover table-lg" id="tbUsers">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Correo</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <table class="table table-hover table-lg" id="tbUsers"></table>
                 </div>
             </div>
         </div>

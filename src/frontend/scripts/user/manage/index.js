@@ -1,8 +1,8 @@
 (function ($) {
     'use-strict';
 
-//    var $moduleUrl = (Request.Host + Request.BaseUrl + "/" + Request.UrlHash.m);
-//    var $controlerUrl = $moduleUrl + "/" + Request.UrlHash.c;
+    var $moduleUrl = (Request.Host + Request.BaseUrl + "/" + Request.UrlHash.m);
+    var $controlerUrl = $moduleUrl + "/" + Request.UrlHash.c;
     var $table = $('#tbUsers');
     var $btnAddUser = $('#add-user');
     var $modalAddUser = $('#md-manage-create-user');
@@ -20,15 +20,15 @@
             create_user(data, btn);
         },
         rules: {
-            'nombres': {
-                required: {
-                    message: 'Este campo debe ser llenado'
-                },
+            'cod_per': {
+                required: true,
             },
-            'apellidos': {
-                required: {
-                    message: 'Este campo debe ser llenado'
-                },
+            'username': {
+                required: true,
+            },
+            'email': {
+                required: true,
+                email: true
             }
         }
     });
@@ -36,24 +36,24 @@
     var create_user = function (data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
         var inputs = $modalAddUser.find('#form-create-user input');
-        inputs.val('').removeClass('valid');
-        inputs.attr("disabled",true);
-        
-        $.post('/web/user/manage/save', data, function (response) {
-            console.dir(response);
+        //inputs.val('').removeClass('valid');
+        inputs.removeClass('valid');
+        inputs.attr("disabled", true);
+
+        $.post(controllerUrl + '/save', data, function (response) {
+            console.log(response);
             if (!response.error) {
-                //$modalAddUser.find('#form-create-user input').val('').removeClass('valid');
-                //btn.prop({disabled: false}).html('Guardar');
-                //$table.bootstrapTable('refresh');
+                location.href = controllerUrl + '/edit?id=' + response.data.id;
+            } else {
+                noty({type: 'error', text: response.message, timeout: 5000}).show();
+                inputs.attr("disabled", false);
+                btn.prop({disabled: false}).html('Guardar');
+                $table.bootstrapTable('refresh');
                 //$modalAddUser.modal('hide');
-                //noty({type: 'success', text: 'Usuario creado con éxito', timeout: 1000}).show();
-                setTimeout(function () {
-                    location.href = '/web/user/manage/edit/id/' + response.data.id;
-                }, 5000);
             }
-        },'json').fail(function (xhr, status, error) {
+        }, 'json').fail(function (xhr, status, error) {
             if (xhr.status != 200) {
-                noty({type: 'error', text: xhr.responseText, timeout: 1000}).show();
+                noty({type: 'error', text: xhr.responseText}).show();
                 btn.prop({disabled: false}).html('Guardar');
             }
         });
@@ -61,31 +61,28 @@
 
     var _action_buttons = function (value, row, index) {
         return [
-            '<a>Editar</a>'
+            '<a class="edit" href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>'
         ].join('');
     };
 
     var _action_edit = function (e, value, row, index) {
-        var href = '';
-        if (row.tipo == 'P') {
-            href = 'person/id' + ' / ' + row.id;
-        }
-        location.href = ' / ' + href;
+        location.href = controllerUrl + '/edit?id=' + row.id_user;
     };
 
     var _columns = function () {
         return  [
             {
-                field: 'ID_APP',
-                title: 'Código',
+                field: 'id_user',
+                title: 'ID',
                 align: 'center',
                 sortable: true,
                 width: '50px',
             },
-            {field: 'NAME_APP', title: 'Nombre', align: 'center', sortable: true},
-            {field: 'SECRET_APP', title: 'Secreto', align: 'center', sortable: true},
-            {field: 'KEY_APP', title: 'Llave', sortable: true},
-            {field: 'STATE_APP', title: 'Estado', align: 'center', sortable: true},
+            {field: 'cod_per', title: 'Código personal', align: 'center', sortable: true},
+            {field: 'id_type_user', title: 'Tipo de usuario', align: 'center', sortable: true},
+            {field: 'username', title: 'Username', sortable: true},
+            {field: 'state', title: 'Estado', align: 'center', sortable: true},
+            {field: 'state_user', title: 'Estado', align: 'center', sortable: true},
             {
                 field: 'action',
                 title: 'Acciones',
@@ -107,7 +104,7 @@
         pagination: true,
         pageSize: 10,
         idField: 'id',
-        url: '/web/user/manage/list',
+        url: controllerUrl + '/list',
         columns: _columns()
     });
 
