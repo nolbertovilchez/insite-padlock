@@ -9,7 +9,19 @@
                     <div class="form-group row">
                         <label for="form-1-1" class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" name="nombre" placeholder="Nombre de Rol">
+                            <input type="text" class="form-control genera_abreviatura" name="role[name]" placeholder="Nombre de Rol">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="form-1-1" class="col-md-3 control-label">Código</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="code_role" name="role[code_role]" placeholder="Código de Rol">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="form-1-1" class="col-md-3 control-label">Descripción</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name="role[description]" placeholder="Descripcion de Rol"></textarea>
                         </div>
                     </div>
                     <div class="text-right">

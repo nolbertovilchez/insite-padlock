@@ -1,21 +1,27 @@
-<form class="form-horizontal mrg-top-20" id="form-update-application">
+<form class="form-horizontal mrg-top-20" id="form-update-application" enctype="multipart/form-data">
     <div class="form-group row">
         <label for="form-1-1" class="col-md-3 control-label">Nombre</label>
         <div class="col-md-9">
-            <input type="hidden" class="form-control width-50" name="id" value="<?= $data['ID_APP'] ?>">
-            <input type="text" class="form-control width-50" name="nombre" placeholder="Nombre de Aplicación" value="<?= $data['NAME_APP'] ?>">
+            <input type="hidden" class="form-control width-50" name="id" value="<?= $data['id_app'] ?>">
+            <input type="text" class="form-control width-50" name="nombre" placeholder="Nombre de Aplicación" value="<?= $data['name'] ?>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="form-1-1" class="col-md-3 control-label">URL</label>
+        <div class="col-md-9">
+            <input type="text" class="form-control width-50" name="url" placeholder="URL de Aplicación" value="<?= $data['url'] ?>">
         </div>
     </div>
     <div class="form-group row">
         <label for="form-1-1" class="col-md-3 control-label">Secret App</label>
         <div class="col-md-9">
-            <input type="text" class="form-control width-50" name="secret_app" readonly="true">
+            <input type="text" class="form-control width-50" name="secret_app" readonly="true" value="<?= $data['secretkey'] ?>">
         </div>
     </div>
     <div class="form-group row">
         <label for="form-1-1" class="col-md-3 control-label">Key App</label>
         <div class="col-md-9">
-            <input type="text" class="form-control width-50" name="key_app" readonly="true">
+            <input type="text" class="form-control width-50" name="key_app" readonly="true" value="<?= $data['key'] ?>"> 
         </div>
     </div>
     <div class="form-group row">
@@ -23,9 +29,9 @@
         <div class="col-md-6">
             <div>
                 <label for="img-upload" class="pointer">
-                    <img src="" width="117" alt="">
-                    <span class="btn btn-default display-block no-mrg-btm">Choose file</span>
-                    <input class="d-none" type="file" name="uploadedimages0" multiple="" id="img-upload">
+                    <?= yii\helpers\Html::img("@web/files/applications/{$data['id_app']}/{$data['image']}", ['id'=>'img-preview', 'width'=>'117']); ?>
+                    <span class="btn btn-default display-block no-mrg-btm">Seleccionar Archivo</span>
+                    <input class="d-none" type="file" name="image" multiple="" id="img-upload">
                 </label>
             </div>
         </div>
