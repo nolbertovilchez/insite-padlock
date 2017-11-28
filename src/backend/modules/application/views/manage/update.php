@@ -1,6 +1,3 @@
-<div class="page-title">
-    <h4><?= $this->context->section_title ?> <i class="fa fa-angle-double-right"></i> <small><?= $this->context->current_title ?></small></h4> 
-</div>
 <div class="card">
     <div class="tab-info">
         <ul class="nav nav-tabs" role="tablist">
