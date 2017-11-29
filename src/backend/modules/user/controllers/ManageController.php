@@ -76,7 +76,7 @@ class ManageController extends MainController {
                     JSON::response(FALSE, 200, "Usuario registrado con éxito", $response);
                 } else {
                     throw new Exception('[Error al crear los datos de recuperación del usuario] '
-                        . Utils::getErrorsText($model->getErrors()), 900);
+                    . Utils::getErrorsText($model->getErrors()), 900);
                 }
             } else {
                 throw new Exception('[Error al crear usuario] ' . Utils::getErrorsText($model->getErrors()), 900);
@@ -93,20 +93,60 @@ class ManageController extends MainController {
      * @param type $id
      */
     public function actionEdit($id) {
-        $data = [];
-        return $this->render('edit', $data);
+        $data = QUser::getByPk($id);
+        //Utils::show($data,true);
+        $this->current_title = $data['username'];
+        return $this->render('edit', ['data'=>$data]);
     }
 
     /**
      * Actualiza los datos de un usuario
      */
     public function actionUpdate() {
+        $transaction = Yii::$app->db->beginTransaction();
         try {
             if (!Yii::$app->request->isAjax) {
                 throw new Exception("El metodo no esta permitido", 403);
             }
             $id_user = Yii::$app->request->post("id_user");
+            $type = Yii::$app->request->post("type");
+            switch($type){
+                case 'general':
+                    $general = Yii::$app->request->post("general");
+                    var_dump($general['cod_per']);
+                    break;
+                case 'recovery':
+                    break;
+                case 'apps':
+            }
+            $transaction->commit();
+            JSON::response(FALSE, 200, "Usuario actualizado con éxito", []);
         } catch (Exception $ex) {
+            $transaction->rollBack();
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionDelete() {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_user      = Yii::$app->request->post("id_user");
+            $model        = User::findOne($id_user);
+            $model->state = 0;
+
+            if (!$model->update(['state'])) {
+                throw new Exception("Error al eliminar el usuario ", 900);
+            }
+
+            $transaction->commit();
+            JSON::response(FALSE, 200, "Usuario eliminado con éxito", []);
+        } catch (Exception $ex) {
+            $transaction->rollBack();
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
         }
     }
