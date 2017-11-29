@@ -10,13 +10,13 @@
     var columns = function () {
         return  [
             {
-                field: 'id',
+                field: 'id_action',
                 title: 'ID',
                 align: 'center',
                 sortable: true,
                 width: '50px',
             },
-            {field: 'name_action', title: 'Nombre', align: 'center', sortable: true},
+            {field: 'name', title: 'Nombre', align: 'center', sortable: true},
             {
                 field: 'action',
                 title: 'Accion',
@@ -44,13 +44,12 @@
         }
     };
     var _action_remove = function (e, value, row, index) {
-        $.post(moduleUrl+'/permissions/remove', row, function (response) {
+        $.post(moduleUrl + '/permissions/remove', row, function (response) {
             if (!response.error) {
                 noty({type: 'success', text: response.message, timeout: 1000}).show();
-                var unique = $tbOwn.bootstrapTable('getRowByUniqueId', row.id);
-                $tbOwn.bootstrapTable('removeByUniqueId', row.id);
+                $tbOwn.bootstrapTable('refresh');
                 row.type = "available";
-                $tbAvailable.bootstrapTable('append', row);
+                $tbAvailable.bootstrapTable('refresh');
             }
         }, "json").fail(function (xhr, status, error) {
             if (xhr.status != 200) {
@@ -60,12 +59,13 @@
     };
 
     var _action_add = function (e, value, row, index) {
-        $.post(moduleUrl+'/permissions/add', row, function (response) {
+        row.id_role = $cboRole.val();
+        $.post(moduleUrl + '/permissions/add', row, function (response) {
             if (!response.error) {
                 noty({type: 'success', text: response.message, timeout: 1000}).show();
-                $tbAvailable.bootstrapTable('removeByUniqueId', row.id);
+                $tbAvailable.bootstrapTable('refresh');
                 row.type = "own";
-                $tbOwn.bootstrapTable('append', row);
+                $tbOwn.bootstrapTable('refresh');
             }
         }, "json").fail(function (xhr, status, error) {
             if (xhr.status != 200) {
@@ -88,7 +88,7 @@
                 pageSize: 10,
                 idField: 'id',
                 uniqueId: 'id',
-                url: moduleUrl+'/permissions/list_role_own?id=' + role,
+                url: moduleUrl + '/permissions/list_role_own?id=' + role,
                 columns: columns()
             });
             $tbAvailable.bootstrapTable("destroy");
@@ -100,7 +100,7 @@
                 pageSize: 10,
                 idField: 'id',
                 uniqueId: 'id',
-                url: moduleUrl+'/permissions/list_role_available?id=' + role,
+                url: moduleUrl + '/permissions/list_role_available?id=' + role,
                 columns: columns()
             });
         }

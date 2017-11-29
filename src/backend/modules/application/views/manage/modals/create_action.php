@@ -9,7 +9,15 @@
                     <div class="form-group row">
                         <label for="form-1-1" class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" name="nombre" placeholder="Nombre de Acción">
+                            <input type="hidden" class="form-control" name="actions[id_action]">
+                            <input type="hidden" class="form-control" name="actions[id_app]">
+                            <input type="text" class="form-control" name="actions[name]" placeholder="Nombre de Acción">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="form-1-1" class="col-md-3 control-label">Descripción</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name="actions[description]" placeholder="Descripcion de Acción"></textarea>
                         </div>
                     </div>
                     <div class="text-right">

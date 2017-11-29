@@ -32,15 +32,74 @@
                     }
                 }
             ];
+        } else if (type == "actions") {
+            format = [
+                {
+                    field: 'id_action',
+                    title: 'Código',
+                    align: 'center',
+                    sortable: true,
+                    width: '50px',
+                },
+                {field: 'name', title: 'Nombre', align: 'center', sortable: true},
+                {field: 'description', title: 'Descripción', align: 'center', sortable: true},
+                {field: 'state', title: 'Estado', align: 'center', sortable: true},
+                {
+                    field: 'action',
+                    title: 'Acciones',
+                    align: 'center',
+                    sortable: false,
+                    width: '100px',
+                    formatter: _action_buttons,
+                    events: {
+                        'click .edit': _action_edit,
+                        'click .delete': _action_delete,
+                    }
+                }
+            ];
+        } else if (type == "users") {
+            format = [
+                {
+                    field: 'id_app_user',
+                    title: 'Código',
+                    align: 'center',
+                    sortable: true,
+                    width: '50px',
+                },
+                {field: 'cod_per', title: 'Identificador', align: 'center', sortable: true},
+                {field: 'nombre_persona', title: 'Nombre', align: 'center', sortable: true},
+                {field: 'role', title: 'Rol', align: 'center', sortable: true},
+                {
+                    field: 'action',
+                    title: 'Acciones',
+                    align: 'center',
+                    sortable: false,
+                    width: '100px',
+                    formatter: _action_buttons,
+                    events: {
+                        'click .edit': _action_edit,
+                        'click .delete': _action_delete,
+                        'click .addpermit': _action_delete,
+                        'click .removepermit': _action_delete,
+                    }
+                }
+            ];
+
         }
         return format;
     };
 
     var _action_buttons = function (value, row, index) {
-        return [
+        var default_actions = [
             '<a class="btn btn-default btn-icon btn-rounded edit cursor font-size-8" title="Editar"><i class="fa fa-pencil"></i></a>',
             '<a class="btn btn-default btn-icon btn-rounded delete cursor font-size-8" title="Eliminar"><i class="fa fa-trash"></i></a>'
-        ].join('');
+        ];
+        if (row.type == "users") {
+            default_actions.push('<a class="btn btn-default btn-icon btn-rounded addpermit cursor font-size-8" title="Adicionar Permiso"><i class="fa fa-plus"></i></a>');
+            default_actions.push('<a class="btn btn-default btn-icon btn-rounded removepermit cursor font-size-8" title="Restringir Permiso"><i class="fa fa-minus"></i></a>');
+        }
+
+        return default_actions.join('');
     };
 
     var _action_edit = function (e, value, row, index) {
@@ -48,30 +107,53 @@
     };
 
     var _action_delete = function (e, value, row, index) {
+        if (typeof row.name == "undefined") {
+            row.name = row.nombre_persona;
+        }
+        var message = "<h5 class='text-center'>";
+        switch (row.type) {
+            case "roles":
+                message += "Está por eliminar el rol <strong>" + row.name + "</strong>";
+                break;
+            case "actions":
+                message += "Está por eliminar la acción <strong>" + row.name + "</strong>";
+                break;
+            case "users":
+                message += "Está por eliminar a <strong>" + row.name + "</strong> con rol <strong>" + row.role + "</strong>";
+                break;
+        }
+        message += ", ¿Seguro que desea continuar?</h5>";
         var $row = row;
-        _confirm("<h5 class='text-center'>Está por eliminar el role <strong>" + row.name + "</strong>, ¿Seguro que desea continuar?</h5>", function () {
+        _confirm(message, function () {
             _delete_type($row);
         }, function () {
-
+            console.log("CANCELAR");
         });
     };
 
     var _edit_type = function (data) {
+        var type = data.type;
         var mdCreate = $("#md-manage-create-" + data.type);
         var frmCreate = "#form-create-" + data.type;
         var table = $("#tb-" + data.type);
         $.each(data, function (key, ele) {
-            console.log(key);
-            console.log(ele);
+            mdCreate.find(frmCreate + ' [name="' + data.type + '[' + key + ']"]').val(ele);
+            if (type == "users") {
+                if (key == "id_user") {
+                    mdCreate.find("#content-edit").empty().append("<label>" + data.nombre_persona + "</label>").removeClass('d-none');
+                    mdCreate.find("#content-create").addClass("d-none");
+                }
+            }
+
         });
-        mdCreate.find(frmCreate + ' input,select').val('').removeClass('valid').removeClass('error');
+        mdCreate.find(frmCreate + ' input,select').removeClass('valid').removeClass('error');
         mdCreate.find(frmCreate + ' label.error').remove();
         mdCreate.modal('show');
         mdCreate.find(frmCreate).validate({
             submitHandler: function (form) {
                 var btn = $(form).find('button[type=submit]');
                 var data = $(form).serialize() + '&id=' + Request._GET.id;
-                create_partial(data.type, mdCreate, table, data, btn);
+                create_partial(type, mdCreate, table, data, btn);
             },
             rules: {
                 'nombre': {

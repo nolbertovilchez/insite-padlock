@@ -5,7 +5,7 @@ var moduleUrl = (Request.Host + Request.BaseUrl + Request.UrlHash.m);
 var controllerUrl = moduleUrl + "/" + Request.UrlHash.c;
 
 var _confirm = function (html, success, error, title, type) {
-    var titulo = "Advertencia! ";
+    var titulo = "¡Advertencia!";
     var tipo = "warning";
     if (typeof title !== "undefined") {
         titulo = title;
@@ -22,17 +22,19 @@ var _confirm = function (html, success, error, title, type) {
         cancelButtonColor: '#d33',
         cancelButtonText: 'Cancelar',
         confirmButtonText: '<i class="fa fa-thumbs-o-up"></i> Estoy seguro de lo que hago.'
-    }).then(function () {
-        if (typeof success != "undefined")
-            success();
-    }, function () {
-        if (typeof error != "undefined")
-            error();
+    }).then((result) => {
+        if (result.value) {
+            if (typeof success != "undefined")
+                success();
+        } else if (result.dismiss === 'cancel') {
+            if (typeof error != "undefined")
+                error();
+        }
     });
 };
 
 var _alert = function (html, success, error, title, type) {
-    var titulo = "Advertencia! ";
+    var titulo = "¡Advertencia! ";
     var tipo = "warning";
     if (typeof title !== "undefined") {
         titulo = title;
@@ -56,7 +58,7 @@ var _alert = function (html, success, error, title, type) {
 };
 
 var _success = function (html, success, error, title, type) {
-    var titulo = "Conforme! ";
+    var titulo = "¡Conforme! ";
     var tipo = "success";
     if (typeof title !== "undefined") {
         titulo = title;

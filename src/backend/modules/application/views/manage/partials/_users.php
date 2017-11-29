@@ -19,4 +19,4 @@
         </div>
     </div>
 </div>
-<?= $this->render("/manage/modals/create_user"); ?>
+<?= $this->render("/manage/modals/create_user", ["data" => $data]); ?>
