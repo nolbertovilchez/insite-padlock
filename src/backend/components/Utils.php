@@ -38,6 +38,30 @@ class Utils {
         }
         return $_GET[$nombreGet];
     }
+    
+    /**
+     * Concatenar los errores de validacion de un modelo. Estos se obtienen con $model->getErrors() y devuelve:
+     *  [
+     *      'username' => [
+     *          'Username is required.',
+     *          'Username must contain only word characters.',
+     *      ],
+     *      'email' => [
+     *          'Email address is invalid.',
+     *      ]
+     *  ]
+     * 
+     * Esta funcion concatena todos esos mensajes en un solo texto.
+     * @param array $errors
+     * @return string
+     */
+    public static function getErrorsText($errors){
+        $txt = '';
+        foreach ($errors as $attribute=>$messages){
+            $txt .= implode($messages);
+        }
+        return $txt;
+    }
 
     public static function generateToken($value) {
         return sha1(hash_hmac("sha1", $value, Constante::SECRET, true));

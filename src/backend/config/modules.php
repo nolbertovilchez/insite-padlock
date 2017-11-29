@@ -7,4 +7,7 @@ return [
     'application' => [
         'class' => 'app\modules\application\ApplicationModule',
     ],
+    'user' => [
+        'class' => 'app\modules\user\UserModule',
+    ],
 ];
