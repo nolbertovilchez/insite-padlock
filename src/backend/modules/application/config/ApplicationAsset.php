@@ -34,9 +34,9 @@ class ApplicationAsset {
             "depends" => [],
         ],
         "manage.edit" => [
-            "js"      => ["manage/update","manage/permissions"],
+            "js"      => ["manage/update","manage/permissions","manage/users"],
             "css"     => [],
-            "depends" => [],
+            "depends" => ['insite\asset\Select2'],
         ]
     ];
 

@@ -5,7 +5,7 @@ var moduleUrl = (Request.Host + Request.BaseUrl + Request.UrlHash.m);
 var controllerUrl = moduleUrl + "/" + Request.UrlHash.c;
 
 var _confirm = function (html, success, error, title, type) {
-    var titulo = "Advertencia! ";
+    var titulo = "¡Advertencia!";
     var tipo = "warning";
     if (typeof title !== "undefined") {
         titulo = title;
@@ -34,7 +34,7 @@ var _confirm = function (html, success, error, title, type) {
 };
 
 var _alert = function (html, success, error, title, type) {
-    var titulo = "Advertencia! ";
+    var titulo = "¡Advertencia! ";
     var tipo = "warning";
     if (typeof title !== "undefined") {
         titulo = title;
@@ -58,7 +58,7 @@ var _alert = function (html, success, error, title, type) {
 };
 
 var _success = function (html, success, error, title, type) {
-    var titulo = "Conforme! ";
+    var titulo = "¡Conforme! ";
     var tipo = "success";
     if (typeof title !== "undefined") {
         titulo = title;

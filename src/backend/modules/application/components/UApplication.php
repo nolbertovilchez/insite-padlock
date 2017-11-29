@@ -8,6 +8,8 @@
 
 namespace app\modules\application\components;
 
+use app\components\Chacad;
+
 /**
  * Description of UApplication
  *
@@ -68,6 +70,42 @@ class UApplication {
 
         foreach ($data as $key => $value) {
             $data[$key]['type'] = "available";
+        }
+
+        return $data;
+    }
+
+    public static function getUsersByApp($id_app) {
+        $data = QApplication::getUsersByApp($id_app);
+
+        foreach ($data as $key => $value) {
+            $chacad                       = Chacad::getDatosPersonales($value['cod_per']);
+            $data[$key]['nombre_persona'] = $chacad['nombre_persona'];
+            $data[$key]['type']           = "users";
+        }
+
+        return $data;
+    }
+
+    public static function getUsersNoApp($id_app, $term) {
+        $persons = Chacad::getPersons($term);
+
+        $data = [];
+
+        foreach ($persons as $key => $value) {
+            $user = QApplication::getUsersByAppByCodper($id_app, $value['dni']);
+
+
+            if ($user && $user['id_app_user'] == "") {
+                $value['id_user'] = $user['id_user'];
+                $data[]           = $value;
+            }
+        }
+
+        foreach ($data as $key => $value) {
+            $data[$key]['type'] = "users";
+            $data[$key]['text'] = $value['label'];
+            $data[$key]['id']   = $value['id_user'];
         }
 
         return $data;
