@@ -52,6 +52,8 @@ class Chacad {
                     ,persona.Ape1
                     ,persona.Ape2
                     ,(RTRIM(persona.Nombres)+' '+RTRIM(persona.Ape1)+' '+RTRIM(persona.Ape2)) as nombre_persona
+                    ,(select Valor from dbo.MedioCom where CodPer = persona.CodPer and CodTCom = 'C1') as telefono_personal
+                    ,(select Valor from dbo.MedioCom where CodPer = persona.CodPer and CodTCom = 'E1') as email_personal
                 from dbo.Identis persona
                 where persona.CodPer = '{$codPer}';";
 

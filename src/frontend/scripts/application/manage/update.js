@@ -79,8 +79,8 @@
                     events: {
                         'click .edit': _action_edit,
                         'click .delete': _action_delete,
-                        'click .addpermit': _action_delete,
-                        'click .removepermit': _action_delete,
+                        'click .addpermit': _action_add,
+                        'click .removepermit': _action_remove,
                     }
                 }
             ];
@@ -102,6 +102,12 @@
         return default_actions.join('');
     };
 
+    var _action_add = function (e, value, row, index) {
+        _add_permit(row);
+    };
+    var _action_remove = function (e, value, row, index) {
+        _remove_permit(row);
+    };
     var _action_edit = function (e, value, row, index) {
         _edit_type(row);
     };
@@ -176,6 +182,15 @@
                 noty({type: 'error', text: xhr.responseText, timeout: 1000}).show();
             }
         });
+    };
+
+    var _add_permit = function (row) {
+        console.log("add");
+    };
+
+    var _remove_permit = function (row) {
+        console.log("remove");
+
     };
 
     $tabs.on("click", function () {
