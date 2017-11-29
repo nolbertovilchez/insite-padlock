@@ -51,7 +51,7 @@ class QApplication {
             )
             where app.state = 1 and app.id_app = :id";
         $command = Yii::$app->db->createCommand($sql);
-        $command->bindParam(":id", $id, \yii\db\mssql\PDO::PARAM_STR);
+        $command->bindParam(":id", $id, \yii\db\mssql\PDO::PARAM_INT);
 
         return $command->queryOne();
     }
@@ -60,6 +60,36 @@ class QApplication {
         $sql     = "SELECT * from application_role where state = 1 and id_app = :id";
         $command = Yii::$app->db->createCommand($sql);
         $command->bindParam(":id", $id_app, \yii\db\mssql\PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+    
+    public static function getActionsByApp($id_app) {
+        $sql     = "SELECT * from application_action where state = 1 and id_app = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_app, \yii\db\mssql\PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+    
+    public static function getOwnActionByRole($id_role) {
+        $sql     = "select ap.*, aa.name 
+                    from application_permit ap
+                    inner join application_action aa on (
+                            aa.id_action = ap.id_action
+                            and aa.state = 1
+                    )
+                    where ap.state = 1 and ap.id_role = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_role, \yii\db\mssql\PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+    
+    public static function getAvailableActionByRole($id_role) {
+        $sql     = "select * from application_action where state = 1 and id_action not in (select id_action from application_permit where state = 1 and id_role = :id)";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_role, \yii\db\mssql\PDO::PARAM_INT);
 
         return $command->queryAll();
     }

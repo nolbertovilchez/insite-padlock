@@ -32,6 +32,32 @@
                     }
                 }
             ];
+        } else if (type == "actions") {
+            format = [
+                {
+                    field: 'id_action',
+                    title: 'Código',
+                    align: 'center',
+                    sortable: true,
+                    width: '50px',
+                },
+                {field: 'name', title: 'Nombre', align: 'center', sortable: true},
+                {field: 'description', title: 'Descripción', align: 'center', sortable: true},
+                {field: 'state', title: 'Estado', align: 'center', sortable: true},
+                {
+                    field: 'action',
+                    title: 'Acciones',
+                    align: 'center',
+                    sortable: false,
+                    width: '100px',
+                    formatter: _action_buttons,
+                    events: {
+                        'click .edit': _action_edit,
+                        'click .delete': _action_delete,
+                    }
+                }
+            ];
+
         }
         return format;
     };
@@ -52,26 +78,26 @@
         _confirm("<h5 class='text-center'>Está por eliminar el role <strong>" + row.name + "</strong>, ¿Seguro que desea continuar?</h5>", function () {
             _delete_type($row);
         }, function () {
-
+            console.log("CANCELAR");
         });
     };
 
     var _edit_type = function (data) {
+        var type = data.type;
         var mdCreate = $("#md-manage-create-" + data.type);
         var frmCreate = "#form-create-" + data.type;
         var table = $("#tb-" + data.type);
         $.each(data, function (key, ele) {
-            console.log(key);
-            console.log(ele);
+            mdCreate.find(frmCreate + ' [name="' + data.type + '[' + key + ']"]').val(ele);
         });
-        mdCreate.find(frmCreate + ' input,select').val('').removeClass('valid').removeClass('error');
+        mdCreate.find(frmCreate + ' input,select').removeClass('valid').removeClass('error');
         mdCreate.find(frmCreate + ' label.error').remove();
         mdCreate.modal('show');
         mdCreate.find(frmCreate).validate({
             submitHandler: function (form) {
                 var btn = $(form).find('button[type=submit]');
                 var data = $(form).serialize() + '&id=' + Request._GET.id;
-                create_partial(data.type, mdCreate, table, data, btn);
+                create_partial(type, mdCreate, table, data, btn);
             },
             rules: {
                 'nombre': {

@@ -10,7 +10,8 @@ namespace app\modules\application\controllers;
 
 use app\components\MainController;
 use yii\base\Exception;
-use app\modules\application\components\QApplication;
+use app\modules\application\components\UApplication;
+use app\models\ApplicationPermit;
 use app\components\JSON;
 use app\components\Utils;
 use Yii;
@@ -22,26 +23,6 @@ use Yii;
  */
 class PermissionsController extends MainController {
 
-    public function actionList() {
-        try {
-            if (!Yii::$app->request->isAjax) {
-                throw new Exception("El metodo no esta permitido", 403);
-            }
-
-            $data["data"] = QApplication::getAll();
-
-            JSON::response(FALSE, 200, "", $data);
-        } catch (Exception $ex) {
-            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
-        }
-    }
-
-    public function actionSave() {
-        $nombre = Yii::$app->request->post("nombre");
-
-        Utils::show($nombre);
-    }
-
     public function actionList_role_own() {
         try {
             if (!Yii::$app->request->isAjax) {
@@ -50,10 +31,7 @@ class PermissionsController extends MainController {
 
             $id_rol = Yii::$app->request->get("id");
 
-            $data = [];
-
-            $data['data'][] = ["id_role" => $id_rol, "id" => 1, "name_action" => "Registrar", "type" => "own"];
-
+            $data['data'] = UApplication::getOwnActionByRole($id_rol);
 
             JSON::response(FALSE, 200, "", $data);
         } catch (Exception $ex) {
@@ -69,10 +47,7 @@ class PermissionsController extends MainController {
 
             $id_rol = Yii::$app->request->get("id");
 
-            $data = [];
-
-            $data['data'][] = ["id_role" => $id_rol, "id" => 2, "name_action" => "Editar", "type" => "available"];
-
+            $data['data'] = UApplication::getAvailableActionByRole($id_rol);
 
             JSON::response(FALSE, 200, "", $data);
         } catch (Exception $ex) {
@@ -81,35 +56,56 @@ class PermissionsController extends MainController {
     }
 
     public function actionAdd() {
+        $transaction = Yii::$app->db->beginTransaction();
+
         try {
             if (!Yii::$app->request->isAjax) {
                 throw new Exception("El metodo no esta permitido", 403);
             }
 
             $id_rol    = Yii::$app->request->post("id_role");
-            $id_accion = Yii::$app->request->post("id");
+            $id_accion = Yii::$app->request->post("id_action");
 
-            $data = ['rol' => $id_rol, 'accion' => $id_accion];
+            $model            = new ApplicationPermit();
+            $model->id_action = $id_accion;
+            $model->id_role   = $id_rol;
 
-            JSON::response(FALSE, 200, "Acción #{$id_accion} agregada al Rol #{$id_rol}", $data);
+            if (!$model->save()) {
+                throw new Exception("Error al agregar permiso al rol - " . print_r($model->getErrors(), true), 900);
+            }
+
+            $transaction->commit();
+
+            JSON::response(FALSE, 200, "Acción #{$id_accion} agregada al Rol #{$id_rol}", []);
         } catch (Exception $ex) {
+            $transaction->rollBack();
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
         }
     }
 
     public function actionRemove() {
+        $transaction = Yii::$app->db->beginTransaction();
+
         try {
             if (!Yii::$app->request->isAjax) {
                 throw new Exception("El metodo no esta permitido", 403);
             }
 
+            $id_permit    = Yii::$app->request->post("id_permit");
+            $model        = ApplicationPermit::findOne($id_permit);
+            $model->state = 0;
+
+            if (!$model->save()) {
+                throw new Exception("Error al remover permiso al rol - " . print_r($model->getErrors(), true), 900);
+            }
+
             $id_rol    = Yii::$app->request->post("id_role");
-            $id_accion = Yii::$app->request->post("id");
+            $id_accion = Yii::$app->request->post("id_action");
 
-            $data = ['rol' => $id_rol, 'accion' => $id_accion];
-
-            JSON::response(FALSE, 200, "Acción #{$id_accion} removida del Rol #{$id_rol}", $data);
+            $transaction->commit();
+            JSON::response(FALSE, 200, "Acción #{$id_accion} removida del Rol #{$id_rol}", []);
         } catch (Exception $ex) {
+            $transaction->rollBack();
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
         }
     }

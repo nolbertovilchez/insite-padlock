@@ -22,12 +22,14 @@ var _confirm = function (html, success, error, title, type) {
         cancelButtonColor: '#d33',
         cancelButtonText: 'Cancelar',
         confirmButtonText: '<i class="fa fa-thumbs-o-up"></i> Estoy seguro de lo que hago.'
-    }).then(function () {
-        if (typeof success != "undefined")
-            success();
-    }, function () {
-        if (typeof error != "undefined")
-            error();
+    }).then((result) => {
+        if (result.value) {
+            if (typeof success != "undefined")
+                success();
+        } else if (result.dismiss === 'cancel') {
+            if (typeof error != "undefined")
+                error();
+        }
     });
 };
 
