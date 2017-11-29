@@ -29,7 +29,7 @@ class UserAsset {
      */
     public $action = [
         "manage.index" => [
-            "js"      => ["manage/index"],
+            "js"      => ["manage/index","manage/list"],
             "css"     => [],
             "depends" => [],
         ],
