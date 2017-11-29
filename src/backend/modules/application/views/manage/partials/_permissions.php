@@ -1,7 +1,7 @@
 <div class="row mb-3">
     <div class="col-md-12">
         <div class="text-left">
-            <?= yii\helpers\Html::dropDownList("cboRole", null, app\modules\application\components\UApplication::cboRolesByApp($data['id_app']), ['class' => "form-control width-20", "id" => "cboRole","prompt"=>"Seleccione..."]); ?>
+            <?= yii\helpers\Html::dropDownList("cboRole", null, [], ['class' => "form-control width-20", "id" => "cboRole","prompt"=>"Seleccione..."]); ?>
         </div>
     </div>
 </div>

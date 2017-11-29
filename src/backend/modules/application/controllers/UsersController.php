@@ -12,6 +12,8 @@ use app\components\MainController;
 use yii\base\Exception;
 use app\modules\application\components\UApplication;
 use app\models\ApplicationUser;
+use app\models\ApplicationUserPermitAdditional;
+use app\models\ApplicationUserPermitRestricted;
 use app\components\JSON;
 use app\components\Utils;
 use Yii;
@@ -108,6 +110,182 @@ class UsersController extends MainController {
             $transaction->commit();
 
             JSON::response(FALSE, 200, "Usuario eliminado con éxito", []);
+        } catch (Exception $ex) {
+            $transaction->rollBack();
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionList_permit_available() {
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_app_user = Yii::$app->request->get("id");
+
+            $data["data"] = UApplication::getActionsPermitAvailable($id_app_user);
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionList_permit_own() {
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_app_user = Yii::$app->request->get("id");
+
+            $data["data"] = UApplication::getActionsPermitOwn($id_app_user);
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionAdd() {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_app_user = Yii::$app->request->post("id_app_user");
+            $id_accion   = Yii::$app->request->post("id_action");
+
+            $model              = new ApplicationUserPermitAdditional();
+            $model->id_action   = $id_accion;
+            $model->id_app_user = $id_app_user;
+
+            if (!$model->save()) {
+                throw new Exception("Error al agregar accion adicional al usuario - " . print_r($model->getErrors(), true), 900);
+            }
+
+            $transaction->commit();
+
+            JSON::response(FALSE, 200, "Acción #{$id_accion} agregada al Permiso Usuario #{$id_app_user}", []);
+        } catch (Exception $ex) {
+            $transaction->rollBack();
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionRemove() {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_user_permit_add = Yii::$app->request->post("id_user_permit_add");
+            $model              = ApplicationUserPermitAdditional::findOne($id_user_permit_add);
+            $model->state       = 0;
+
+            if (!$model->save()) {
+                throw new Exception("Error al remover accion al usuario - " . print_r($model->getErrors(), true), 900);
+            }
+
+            $id_app_user = Yii::$app->request->post("id_app_user");
+            $id_accion   = Yii::$app->request->post("id_action");
+
+            $transaction->commit();
+            JSON::response(FALSE, 200, "Acción #{$id_accion} removida del Permiso Usuario #{$id_app_user}", []);
+        } catch (Exception $ex) {
+            $transaction->rollBack();
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionList_permit_allow() {
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_app_user = Yii::$app->request->get("id");
+
+            $data["data"] = UApplication::getActionsPermitAllow($id_app_user);
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionList_permit_restricted() {
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_app_user = Yii::$app->request->get("id");
+
+            $data["data"] = UApplication::getActionsPermitRestricted($id_app_user);
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionRestrict() {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_app_user = Yii::$app->request->post("id_app_user");
+            $id_permit   = Yii::$app->request->post("id_permit");
+
+            $model              = new ApplicationUserPermitRestricted();
+            $model->id_permit   = $id_permit;
+            $model->id_app_user = $id_app_user;
+
+            if (!$model->save()) {
+                throw new Exception("Error al restringir accion al usuario - " . print_r($model->getErrors(), true), 900);
+            }
+            
+            $id_accion   = Yii::$app->request->post("id_action");
+
+            $transaction->commit();
+
+            JSON::response(FALSE, 200, "Acción #{$id_accion} restringida al Permiso Usuario #{$id_app_user}", []);
+        } catch (Exception $ex) {
+            $transaction->rollBack();
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionAllow() {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id_user_permit_del = Yii::$app->request->post("id_user_permit_del");
+            $model              = ApplicationUserPermitRestricted::findOne($id_user_permit_del);
+            $model->state       = 0;
+
+            if (!$model->save()) {
+                throw new Exception("Error al permitir accion al usuario - " . print_r($model->getErrors(), true), 900);
+            }
+
+            $id_app_user = Yii::$app->request->post("id_app_user");
+            $id_accion   = Yii::$app->request->post("id_action");
+
+            $transaction->commit();
+            JSON::response(FALSE, 200, "Acción #{$id_accion} permitida a Permiso Usuario #{$id_app_user}", []);
         } catch (Exception $ex) {
             $transaction->rollBack();
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);

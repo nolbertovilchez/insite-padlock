@@ -55,8 +55,8 @@ class UApplication {
         return $data;
     }
 
-    public static function getOwnActionByRole($id_role) {
-        $data = QApplication::getOwnActionByRole($id_role);
+    public static function getOwnActionByRole($id_role, $id_app) {
+        $data = QApplication::getOwnActionByRole($id_role, $id_app);
 
         foreach ($data as $key => $value) {
             $data[$key]['type'] = "own";
@@ -65,8 +65,8 @@ class UApplication {
         return $data;
     }
 
-    public static function getAvailableActionByRole($id_role) {
-        $data = QApplication::getAvailableActionByRole($id_role);
+    public static function getAvailableActionByRole($id_role, $id_app) {
+        $data = QApplication::getAvailableActionByRole($id_role, $id_app);
 
         foreach ($data as $key => $value) {
             $data[$key]['type'] = "available";
@@ -106,6 +106,46 @@ class UApplication {
             $data[$key]['type'] = "users";
             $data[$key]['text'] = $value['label'];
             $data[$key]['id']   = $value['id_user'];
+        }
+
+        return $data;
+    }
+
+    public static function getActionsPermitAvailable($id_app_user) {
+        $data = QApplication::getActionsPermitAvailable($id_app_user);
+
+        foreach ($data as $key => $value) {
+            $data[$key]['type'] = "available";
+        }
+
+        return $data;
+    }
+
+    public static function getActionsPermitOwn($id_app_user) {
+        $data = QApplication::getActionsPermitOwn($id_app_user);
+
+        foreach ($data as $key => $value) {
+            $data[$key]['type'] = "own";
+        }
+
+        return $data;
+    }
+
+    public static function getActionsPermitAllow($id_app_user) {
+        $data = QApplication::getActionsPermitAllow($id_app_user);
+
+        foreach ($data as $key => $value) {
+            $data[$key]['type'] = "allow";
+        }
+
+        return $data;
+    }
+
+    public static function getActionsPermitRestricted($id_app_user) {
+        $data = QApplication::getActionsPermitRestricted($id_app_user);
+
+        foreach ($data as $key => $value) {
+            $data[$key]['type'] = "restricted";
         }
 
         return $data;

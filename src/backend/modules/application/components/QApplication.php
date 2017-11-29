@@ -73,24 +73,27 @@ class QApplication {
         return $command->queryAll();
     }
 
-    public static function getOwnActionByRole($id_role) {
+    public static function getOwnActionByRole($id_role, $id_app) {
         $sql     = "select ap.*, aa.name 
                     from application_permit ap
                     inner join application_action aa on (
-                            aa.id_action = ap.id_action
-                            and aa.state = 1
+                        aa.id_action = ap.id_action
+                        and aa.state = 1
+                        and aa.id_app = :id_app
                     )
                     where ap.state = 1 and ap.id_role = :id";
         $command = Yii::$app->db->createCommand($sql);
         $command->bindParam(":id", $id_role, PDO::PARAM_INT);
+        $command->bindParam(":id_app", $id_app, PDO::PARAM_INT);
 
         return $command->queryAll();
     }
 
-    public static function getAvailableActionByRole($id_role) {
-        $sql     = "select * from application_action where state = 1 and id_action not in (select id_action from application_permit where state = 1 and id_role = :id)";
+    public static function getAvailableActionByRole($id_role, $id_app) {
+        $sql     = "select * from application_action where state = 1 and id_app = :id_app and id_action not in (select id_action from application_permit where state = 1 and id_role = :id)";
         $command = Yii::$app->db->createCommand($sql);
         $command->bindParam(":id", $id_role, PDO::PARAM_INT);
+        $command->bindParam(":id_app", $id_app, PDO::PARAM_INT);
 
         return $command->queryAll();
     }
@@ -137,6 +140,93 @@ class QApplication {
         $command->bindParam(":codper", $cod_per, PDO::PARAM_STR);
 
         return $command->queryOne();
+    }
+
+    public static function getActionsPermitAvailable($id_app_user) {
+        $sql     = "select 
+                        au.id_app_user
+                        ,au.id_app
+                        ,au.id_role
+                        ,au.id_user
+                        ,aa.id_action
+                        ,aa.name
+                    from application_user au
+                    inner join application_action aa on (
+                    aa.id_app = au.id_app
+                    and aa.state = 1
+                    and aa.id_action not in (select id_action from application_permit ap where ap.id_role = au.id_role and ap.state = 1)
+                    and aa.id_action not in (select id_action from application_user_permit_additional aupa where aupa.id_app_user = au.id_app_user and aupa.state = 1)
+                    )
+                    where au.id_app_user = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_app_user, PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+
+    public static function getActionsPermitOwn($id_app_user) {
+        $sql     = "select 
+                        aupa.*
+                        ,aa.name
+                    from application_user_permit_additional aupa 
+                    inner join application_action aa on (
+                    aa.id_action = aupa.id_action
+                    and aa.state = 1
+                    )
+                    where aupa.state = 1 and aupa.id_app_user = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_app_user, PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+
+    public static function getActionsPermitAllow($id_app_user) {
+        $sql     = "select 
+                        au.id_app_user
+                        ,au.id_app
+                        ,au.id_role
+                        ,au.id_user
+                        ,ap.id_permit
+                        ,aa.id_action
+                        ,aa.name
+                    from application_user au
+                    left join application_action aa on (
+                    aa.id_app = au.id_app
+                    and aa.state = 1
+                    and aa.id_action in (select id_action from application_permit ap where ap.id_role = au.id_role and ap.state = 1)
+                    )
+                    inner join application_permit ap on (
+                        ap.id_action = aa.id_action
+                        and ap.id_role = au.id_role
+                        and ap.state = 1
+                        and ap.id_permit not in (select id_permit from application_user_permit_restricted aupr where aupr.id_app_user = au.id_app_user and aupr.state = 1)
+                    )
+                    where au.id_app_user = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_app_user, PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+
+    public static function getActionsPermitRestricted($id_app_user) {
+        $sql     = "select 
+                        aupr.*
+                        ,aa.id_action
+                        ,aa.name
+                    from application_user_permit_restricted aupr 
+                    inner join application_permit ap on (
+                        ap.id_permit = aupr.id_permit
+                        and ap.state = 1
+                    )
+                    inner join application_action aa on (
+                        aa.id_action = ap.id_action
+                        and aa.state = 1
+                    )
+                    where aupr.state = 1 and aupr.id_app_user = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_app_user, PDO::PARAM_INT);
+
+        return $command->queryAll();
     }
 
 }

@@ -185,12 +185,19 @@
     };
 
     var _add_permit = function (row) {
-        console.log("add");
+        var modalPermit = $("#md-add-permit-users");
+        modalPermit.find("#label_usuario").html(row.nombre_persona);
+        modalPermit.find("#label_rol").html(row.role);
+        modalPermit.find("#id_app_user").val(row.id_app_user);
+        modalPermit.modal("show");
     };
 
     var _remove_permit = function (row) {
-        console.log("remove");
-
+        var modalPermit = $("#md-remove-permit-users");
+        modalPermit.find("#label_usuario").html(row.nombre_persona);
+        modalPermit.find("#label_rol").html(row.role);
+        modalPermit.find("#id_app_user").val(row.id_app_user);
+        modalPermit.modal("show");
     };
 
     $tabs.on("click", function () {
@@ -209,6 +216,18 @@
                 url: moduleUrl + '/' + type + '/list?id=' + Request._GET.id,
                 columns: columns(type)
             });
+        }
+        if (type == "permissions") {
+            $("#cboRole").empty();
+            $("#cboRole").append("<option value=''>Seleccione..</option>");
+            $.get(moduleUrl + '/manage/list_roles?id=' + Request._GET.id, function (response) {
+                if (!response.error) {
+                    $.each(response.data, function (key, ele) {
+                        $("#cboRole").append("<option value='" + ele.id_role + "'>" + ele.name + "</option>");
+                    });
+                }
+            }, "json");
+            console.log("AQUI TAMOS");
         }
     });
 
