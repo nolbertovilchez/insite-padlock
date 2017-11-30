@@ -25,9 +25,25 @@ class ApiController extends \app\components\MainController {
      */
     public function actionIndex() {
         try {
-            $id_app = Yii::$app->request->get("id");
 
-            $data["data"] = UApplication::getUsersByApp($id_app);
+            $data["data"] = UApplication::getAll();
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
+    public function actionGet_users_by_app() {
+        try {
+
+            $id = Yii::$app->request->get("id");
+
+            if ($id == "") {
+                throw new Exception("No ha ingresado el parámetro correcto", 400);
+            }
+
+            $data["data"] = UApplication::getUsersByApp($id);
 
             JSON::response(FALSE, 200, "", $data);
         } catch (Exception $ex) {

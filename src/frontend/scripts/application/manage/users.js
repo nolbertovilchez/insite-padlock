@@ -188,6 +188,8 @@
             url: moduleUrl + '/users/list_permit_own?id=' + $id_app_user.val(),
             columns: columns()
         });
+    }).on("hidden.bs.modal", function () {
+        $("#tb-users").bootstrapTable('refresh');
     });
 
     $modalRemovePermitUsuario.on("shown.bs.modal", function () {
@@ -216,6 +218,8 @@
             url: moduleUrl + '/users/list_permit_restricted?id=' + $id_app_user.val(),
             columns: columns()
         });
+    }).on("hidden.bs.modal", function () {
+        $("#tb-users").bootstrapTable('refresh');
     });
 
 }(window.jQuery));

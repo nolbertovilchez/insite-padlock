@@ -4,6 +4,25 @@
     var $btnAdd = $(".btnAddPartial");
     var $imgUpload = $("#img-upload");
 
+    var rules = function (type) {
+        var rules = {};
+        if (type == "roles") {
+            rules = {
+                'roles[name]': {
+                    required: {
+                        message: 'Este campo debe ser llenado'
+                    },
+                },
+                'roles[code_role]': {
+                    required: {
+                        message: 'Este campo debe ser llenado'
+                    },
+                }
+            };
+        }
+        return rules;
+    }
+
     var columns = function (type) {
         var format;
         if (type == "roles") {
@@ -161,7 +180,20 @@
             submitHandler: function (form) {
                 var btn = $(form).find('button[type=submit]');
                 var data = $(form).serialize() + '&id=' + Request._GET.id;
-                create_partial(type, mdCreate, table, data, btn);
+                if (type == "users") {
+                    var id_app_user = mdCreate.find('#form-create-' + type + ' [name="users[id_app_user]"]').val();
+                    if (id_app_user != "") {
+                        _confirm("Si edita el Rol al usuario, se reiniciarán los permisos adicionales y restringidos, ¿Desea continuar?", function () {
+                            create_partial(type, mdCreate, table, data, btn);
+                        }, function () {
+                            console.log("CANCELAR");
+                        });
+                    } else {
+                        create_partial(type, mdCreate, table, data, btn);
+                    }
+                } else {
+                    create_partial(type, mdCreate, table, data, btn);
+                }
             },
             rules: {
                 'nombre': {
@@ -229,7 +261,6 @@
                     });
                 }
             }, "json");
-            console.log("AQUI TAMOS");
         }
     });
 
@@ -305,19 +336,12 @@
                 var data = $(form).serialize() + '&id=' + Request._GET.id;
                 create_partial(type, mdCreate, table, data, btn);
             },
-            rules: {
-                'nombre': {
-                    required: {
-                        message: 'Este campo debe ser llenado'
-                    },
-                }
-            }
+            rules: rules(type)
         });
     });
     var create_partial = function (type, mdCreate, table, data, btn) {
         btn.prop({disabled: true}).html('Cargando...');
         $.post(moduleUrl + '/' + type + '/save', data, function (response) {
-            console.log("POST");
             if (!response.error) {
                 mdCreate.find('#form-create-' + type + ' input').val('').removeClass('valid');
                 btn.prop({disabled: false}).html('Guardar');

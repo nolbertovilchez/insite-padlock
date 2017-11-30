@@ -48,6 +48,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-right mt-4">
+                    <a class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</a>
+                </div>
             </div>
         </div>
     </div>
