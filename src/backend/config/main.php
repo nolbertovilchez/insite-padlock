@@ -2,6 +2,7 @@
 
 $params  = require(__DIR__ . '/params.php');
 $db      = require(__DIR__ . '/db.php');
+$chacad  = require(__DIR__ . '/chacad.php');
 $modules = require(__DIR__ . '/modules.php');
 $aliases = require(__DIR__ . '/aliases.php');
 
@@ -24,7 +25,8 @@ $config = [
         ],
         'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'nolberto',
+            'cookieValidationKey'  => 'nolberto',
+            'enableCsrfValidation' => false,
         ],
         'cache'        => [
             'class' => 'yii\caching\FileCache',
@@ -53,6 +55,7 @@ $config = [
             ],
         ],
         'db'           => $db,
+        'chacad'       => $chacad,
         'urlManager'   => [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
