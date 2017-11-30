@@ -69,6 +69,8 @@
                 {field: 'cod_per', title: 'Identificador', align: 'center', sortable: true},
                 {field: 'nombre_persona', title: 'Nombre', align: 'center', sortable: true},
                 {field: 'role', title: 'Rol', align: 'center', sortable: true},
+                {field: 'actions_allowed', title: 'Acciones Adicionales', align: 'center', sortable: true},
+                {field: 'actions_restricted', title: 'Acciones Restringidas', align: 'center', sortable: true},
                 {
                     field: 'action',
                     title: 'Acciones',
