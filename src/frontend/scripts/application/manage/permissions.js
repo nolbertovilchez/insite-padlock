@@ -88,7 +88,7 @@
                 pageSize: 10,
                 idField: 'id',
                 uniqueId: 'id',
-                url: moduleUrl + '/permissions/list_role_own?id=' + role,
+                url: moduleUrl + '/permissions/list_role_own?id=' + role+'&id_app='+Request._GET.id,
                 columns: columns()
             });
             $tbAvailable.bootstrapTable("destroy");
@@ -100,7 +100,7 @@
                 pageSize: 10,
                 idField: 'id',
                 uniqueId: 'id',
-                url: moduleUrl + '/permissions/list_role_available?id=' + role,
+                url: moduleUrl + '/permissions/list_role_available?id=' + role+'&id_app='+Request._GET.id,
                 columns: columns()
             });
         }

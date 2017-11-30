@@ -20,3 +20,5 @@
     </div>
 </div>
 <?= $this->render("/manage/modals/create_user", ["data" => $data]); ?>
+<?= $this->render("/manage/modals/add_user_permit", ["data" => $data]); ?>
+<?= $this->render("/manage/modals/remove_user_permit", ["data" => $data]); ?>

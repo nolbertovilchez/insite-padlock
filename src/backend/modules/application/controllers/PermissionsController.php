@@ -30,8 +30,9 @@ class PermissionsController extends MainController {
             }
 
             $id_rol = Yii::$app->request->get("id");
+            $id_app = Yii::$app->request->get("id_app");
 
-            $data['data'] = UApplication::getOwnActionByRole($id_rol);
+            $data['data'] = UApplication::getOwnActionByRole($id_rol, $id_app);
 
             JSON::response(FALSE, 200, "", $data);
         } catch (Exception $ex) {
@@ -46,8 +47,9 @@ class PermissionsController extends MainController {
             }
 
             $id_rol = Yii::$app->request->get("id");
+            $id_app = Yii::$app->request->get("id_app");
 
-            $data['data'] = UApplication::getAvailableActionByRole($id_rol);
+            $data['data'] = UApplication::getAvailableActionByRole($id_rol, $id_app);
 
             JSON::response(FALSE, 200, "", $data);
         } catch (Exception $ex) {

@@ -157,4 +157,19 @@ class ManageController extends MainController {
         return $this->render('update', ["data" => $data]);
     }
 
+    public function actionList_roles() {
+        try {
+            if (!Yii::$app->request->isAjax) {
+                throw new Exception("El metodo no esta permitido", 403);
+            }
+
+            $id           = Yii::$app->request->get("id");
+            $data["data"] = UApplication::getRolesByApp($id);
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
+
 }
