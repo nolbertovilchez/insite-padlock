@@ -10,6 +10,7 @@ use app\components\MainController;
 use app\components\JSON;
 use app\components\Utils;
 use app\components\Chacad;
+use app\models\Identis;
 use yii\base\Exception;
 use Yii;
 
@@ -61,13 +62,12 @@ class ManageController extends MainController {
                 $json_message                = "Usuario ya esta registrado en padlock";
             } else {
                 // dni terra 42117913
-                $response['data']['exist']        = false;
-                $response['data']['chacad_exist'] = false;
-                $response['data']['chacad_data']  = array();
+                $response['data']['exist']           = false;
+                $response['data']['chacad']['exist'] = false;
 
                 if ($chacad = Chacad::getDatosPersonales($cod_per)) {
-                    $response['data']['chacad_exist'] = true;
-                    $response['data']['chacad_data']  = $chacad;
+                    $response['data']['chacad']['exist'] = true;
+                    $response['data']['chacad']['data']  = $chacad;
                 }
                 $json_message = "Usuario no existe en padlock";
             }
@@ -78,45 +78,62 @@ class ManageController extends MainController {
         }
     }
 
+    /**
+     * Guardar nuevo usuario
+     * @throws Exception
+     */
     public function actionSave() {
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if (!Yii::$app->request->isAjax) {
                 throw new Exception("El metodo no esta permitido", 403);
             }
-            /* $cod_per  = Yii::$app->request->post("cod_per");
-              $username = Yii::$app->request->post("username");
-              $email    = Yii::$app->request->post("email");
-              $number   = Yii::$app->request->post("number");
 
-              $model               = new User();
-              $model->setScenario('create');
-              $model->cod_per      = $cod_per;
-              $model->id_type_user = 1;
-              $model->username     = $username;
-              $model->password     = 'myPass';
-              $model->state_user   = 1;
-              $model->state        = 1;
+            $identis  = Yii::$app->request->post("identis");
+            $contacto = Yii::$app->request->post("contacto");
 
-              if ($model->save()) {
-              $id_user        = $model->id_user;
-              $model          = new UserRecoveryOption();
-              $model->id_user = $id_user;
-              $model->email   = $email;
-              $model->number  = $number;
-              $model->state   = 1;
+            // registrar usuario en padlock
+            $model               = new User();
+            $model->setScenario('create');
+            $model->cod_per      = $identis['CodPer'];
+            $model->id_type_user = 1;
+            $model->username     = $identis['CodPer'];
+            $model->password     = 'myPass';
+            $model->state_user   = 1;
+            $model->state        = 1;
 
-              if ($model->save()) {
-              $transaction->commit();
-              $response['data']['id'] = $id_user;
-              JSON::response(FALSE, 200, "Usuario registrado con éxito", $response);
-              } else {
-              throw new Exception('[Error al crear los datos de recuperación del usuario] '
-              . Utils::getErrorsText($model->getErrors()), 900);
-              }
-              } else {
-              throw new Exception('[Error al crear usuario] ' . Utils::getErrorsText($model->getErrors()), 900);
-              } */
+            if (!$model->save()) {
+                throw new Exception('[Error al crear usuario] ' . Utils::getErrorsText($model->getErrors()), 900);
+            }
+
+            $id_user        = $model->id_user;
+            $model          = new UserRecoveryOption();
+            $model->id_user = $id_user;
+            $model->email   = $contacto['email'];
+            $model->number  = $contacto['telefono'];
+            $model->state   = 1;
+
+            if (!$model->save()) {
+                throw new Exception('[Error al crear los datos de recuperación del usuario] ' . Utils::getErrorsText($model->getErrors()), 900);
+            }
+            // si el usuario existe en chacad
+            if (isset($identis['CodIden']) && $identis['CodIden'] != '') {
+                $chacad             = Identis::findOne($identis['CodIden']);
+                $chacad->attributes = $identis;
+            } else {
+                $chacad             = new Identis();
+                $chacad->attributes = $identis;
+                $chacad->CodIden    = Chacad::generateIdentisCodIden();
+                $chacad->FReg       = date('Y-m-d h:i:s');
+            }
+
+            if (!$chacad->save()) {
+                throw new Exception('[Error al crear/actualizar datos en chacad] ' . Utils::getErrorsText($chacad->getErrors()), 900);
+            }
+
+            $transaction->commit();
+            $response['data']['id_user'] = $id_user;
+            JSON::response(FALSE, 200, "Usuario registrado con éxito", $response);
         } catch (Exception $ex) {
             $transaction->rollBack();
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);

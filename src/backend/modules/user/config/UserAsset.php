@@ -31,7 +31,9 @@ class UserAsset {
         "manage.index" => [
             "js"      => ["manage/index","manage/list"],
             "css"     => [],
-            "depends" => [],
+            "depends" => [
+                
+            ],
         ],
         "manage.edit" => [
             "js"      => ["manage/edit"],
