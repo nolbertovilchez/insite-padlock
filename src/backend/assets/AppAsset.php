@@ -19,7 +19,7 @@ class AppAsset extends AssetBundle {
     public $basePath   = '@webroot/static';
     public $baseUrl    = '@web/static';
     public $css        = [];
-    public $js         = ["js/app.min.js"];
+    public $js         = ["js/app.min.js","js/global/permits.min.js"];
     public $depends    = [];
     public $jsOptions  = ['position' => \yii\web\View::POS_END];
     public $cssOptions = ['position' => \yii\web\View::POS_HEAD];

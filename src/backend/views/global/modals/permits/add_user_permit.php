@@ -7,13 +7,23 @@
             <div class="modal-body">
                 <div class="row mb-3">
                     <div class="col-md-12">
-                        <label class="col-md-3"><b>Usuario:</b></label>
-                        <label class="col-md-8" id="label_usuario"></label>
+                        <div class="row">
+                            <label class="col-md-3"><b>Usuario:</b></label>
+                            <label class="col-md-9" id="label_usuario"></label>
+                        </div>
                     </div>
                     <div class="col-md-12">
-                        <label class="col-md-3"><b>Rol:</b></label>
-                        <label class="col-md-8" id="label_rol"></label>
-                        <input type="hidden" id="id_app_user"/>
+                        <div class="row">
+                            <label class="col-md-3"><b>Aplicación:</b></label>
+                            <label class="col-md-9" id="label_aplicacion"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <label class="col-md-3"><b>Rol:</b></label>
+                            <label class="col-md-9" id="label_rol"></label>
+                            <input type="hidden" id="id_app_user"/>
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-1 mb-1">

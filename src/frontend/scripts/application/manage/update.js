@@ -223,22 +223,6 @@
         });
     };
 
-    var _add_permit = function (row) {
-        var modalPermit = $("#md-add-permit-users");
-        modalPermit.find("#label_usuario").html(row.nombre_persona);
-        modalPermit.find("#label_rol").html(row.role);
-        modalPermit.find("#id_app_user").val(row.id_app_user);
-        modalPermit.modal("show");
-    };
-
-    var _remove_permit = function (row) {
-        var modalPermit = $("#md-remove-permit-users");
-        modalPermit.find("#label_usuario").html(row.nombre_persona);
-        modalPermit.find("#label_rol").html(row.role);
-        modalPermit.find("#id_app_user").val(row.id_app_user);
-        modalPermit.modal("show");
-    };
-
     $tabs.on("click", function () {
         var type = $(this).attr("data-id");
         var list = $(this).attr("data-list");

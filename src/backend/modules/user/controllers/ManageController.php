@@ -52,7 +52,7 @@ class ManageController extends MainController {
             }
 
             $cod_per      = Yii::$app->request->post("cod_per");
-            $user         = User::find()->where(['cod_per' => $cod_per])->one();
+            $user         = User::find()->where(['cod_per' => $cod_per, 'state' => 1])->one();
             $json_message = "";
 
             if ($user) {
@@ -106,15 +106,14 @@ class ManageController extends MainController {
                 throw new Exception('[Error al crear usuario] ' . Utils::getErrorsText($model->getErrors()), 900);
             }
 
-            $id_user        = $model->id_user;
-            $model          = new UserRecoveryOption();
-            $model->id_user = $id_user;
-            $model->email   = $contacto['email'];
-            $model->number  = $contacto['telefono'];
-            $model->state   = 1;
+            $modelRec          = new UserRecoveryOption();
+            $modelRec->id_user = $model->id_user;
+            $modelRec->email   = $contacto['email'];
+            $modelRec->number  = $contacto['telefono'];
+            $modelRec->state   = 1;
 
-            if (!$model->save()) {
-                throw new Exception('[Error al crear los datos de recuperación del usuario] ' . Utils::getErrorsText($model->getErrors()), 900);
+            if (!$modelRec->save()) {
+                throw new Exception('[Error al crear los datos de recuperación del usuario] ' . Utils::getErrorsText($modelRec->getErrors()), 900);
             }
             // si el usuario existe en chacad
             if (isset($identis['CodIden']) && $identis['CodIden'] != '') {
@@ -127,12 +126,12 @@ class ManageController extends MainController {
                 $chacad->FReg       = date('Y-m-d h:i:s');
             }
 
-            /*if (!$chacad->save()) {
-                throw new Exception('[Error al crear/actualizar datos en chacad] ' . Utils::getErrorsText($chacad->getErrors()), 900);
-            }*/
+//            if (!$chacad->save()) {
+//                throw new Exception('[Error al crear/actualizar datos en chacad] ' . Utils::getErrorsText($chacad->getErrors()), 900);
+//            }
 
             $transaction->commit();
-            $response['data']['id_user'] = $id_user;
+            $response['data']['id_user'] = $model->id_user;
             JSON::response(FALSE, 200, "Usuario registrado con éxito", $response);
         } catch (Exception $ex) {
             $transaction->rollBack();
@@ -147,9 +146,9 @@ class ManageController extends MainController {
      */
     public function actionEdit($id) {
         $data                = QUser::getByPk($id);
-        //Utils::show($data,true);
-        $this->current_title = $data['username'];
-        return $this->render('edit', ['data' => $data]);
+        $chacad              = Chacad::getDatosPersonales($data['cod_per']);
+        $this->current_title = $chacad['nombre_persona'];
+        return $this->render('edit', ['data' => $data, 'chacad' => $chacad]);
     }
 
     /**
@@ -165,10 +164,17 @@ class ManageController extends MainController {
             $type    = Yii::$app->request->post("type");
             switch ($type) {
                 case 'general':
-                    $general = Yii::$app->request->post("general");
-                    var_dump($general['cod_per']);
+                    $general              = Yii::$app->request->post("general");
+                    $identis              = Yii::$app->request->post("identis");
                     break;
                 case 'recovery':
+                    $recovery             = Yii::$app->request->post("recovery");
+                    $modelRec             = UserRecoveryOption::findOne($recovery['id_recovery']);
+                    $modelRec->id_user    = $id_user;
+                    $modelRec->attributes = $recovery;
+                    if(!$modelRec->update()){
+                        throw new Exception('[Error al actualizar los datos de recuperación del usuario] ' . Utils::getErrorsText($modelRec->getErrors()), 900);
+                    }
                     break;
                 case 'apps':
             }
