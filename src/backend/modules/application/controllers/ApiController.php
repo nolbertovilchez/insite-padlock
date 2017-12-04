@@ -50,5 +50,22 @@ class ApiController extends \app\components\MainController {
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
         }
     }
+    
+    public function actionGet_apps_by_user() {
+        try {
+
+            $id = Yii::$app->request->get("codper");
+
+            if ($id == "") {
+                throw new Exception("No ha ingresado el parámetro correcto", 400);
+            }
+
+            $data["data"] = UApplication::getAppsByUser($id);
+
+            JSON::response(FALSE, 200, "", $data);
+        } catch (Exception $ex) {
+            JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
+        }
+    }
 
 }

@@ -97,54 +97,6 @@ class QApplication {
 
         return $command->queryAll();
     }
-
-    public static function getUsersByApp($id_app) {
-        $sql     = "SELECT 
-                        au.*
-                        ,ar.name as role
-                        ,u.cod_per
-                        ,(	
-                            select 
-                                GROUP_CONCAT(aa.name SEPARATOR ', ')
-                            from application_user_permit_additional aupa 
-                            inner join application_action aa on (
-                            aa.id_action = aupa.id_action
-                            and aa.state = 1
-                            )
-                            where aupa.state = 1 and aupa.id_app_user =au.id_app_user
-                        ) as actions_allowed
-                        ,(
-                            select 
-                                GROUP_CONCAT(aa.name SEPARATOR ', ')
-                            from application_user_permit_restricted aupr 
-                            inner join application_permit ap on (
-                                ap.id_permit = aupr.id_permit
-                                and ap.state = 1
-                            )
-                            inner join application_action aa on (
-                                aa.id_action = ap.id_action
-                                and aa.state = 1
-                            )
-                            where aupr.state = 1 and aupr.id_app_user =au.id_app_user
-                        ) as actions_restricted
-                    from application_user au
-                    inner join application_role ar ON (
-                        ar.id_role = au.id_role
-                        and ar.id_app = au.id_app
-                        and ar.state = 1
-                    )
-                    inner join user u ON (
-                        u.id_user = au.id_user
-                        and u.state  = 1
-                        and u.state_user = 1
-                    )
-                    where au.state = 1 and au.id_app = :id";
-        $command = Yii::$app->db->createCommand($sql);
-        $command->bindParam(":id", $id_app, PDO::PARAM_INT);
-
-        return $command->queryAll();
-    }
-    
     public static function getUsersByAppByCodper($id_app, $cod_per) {
         $sql     = "SELECT 
                     au.id_app_user
@@ -252,5 +204,14 @@ class QApplication {
 
         return $command->queryAll();
     }
+
+    public static function getUsersByApp($id_app) {
+        $sql     = " = :id";
+        $command = Yii::$app->db->createCommand($sql);
+        $command->bindParam(":id", $id_app, PDO::PARAM_INT);
+
+        return $command->queryAll();
+    }
+    
 
 }

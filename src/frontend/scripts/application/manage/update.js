@@ -9,14 +9,25 @@
         if (type == "roles") {
             rules = {
                 'roles[name]': {
-                    required: {
-                        message: 'Este campo debe ser llenado'
-                    },
+                    required: true
                 },
                 'roles[code_role]': {
-                    required: {
-                        message: 'Este campo debe ser llenado'
-                    },
+                    required: true
+                }
+            };
+        } else if (type == "actions") {
+            rules = {
+                'actions[name]': {
+                    required: true
+                },
+            };
+        } else if (type == "users") {
+            rules = {
+                'users[id_user]': {
+                    required: true
+                },
+                'users[id_role]': {
+                    required: true
                 }
             };
         }
@@ -195,13 +206,7 @@
                     create_partial(type, mdCreate, table, data, btn);
                 }
             },
-            rules: {
-                'nombre': {
-                    required: {
-                        message: 'Este campo debe ser llenado'
-                    },
-                }
-            }
+            rules: rules(type)
         });
     };
 
@@ -274,9 +279,7 @@
         },
         rules: {
             'nombre': {
-                required: {
-                    message: 'Este campo debe ser llenado'
-                },
+                required: true
             }
         }
     });
@@ -290,11 +293,6 @@
             update_application(data, btn);
         },
         rules: {
-            'nombre': {
-                required: {
-                    message: 'Este campo debe ser llenado'
-                },
-            }
         }
     });
 
@@ -336,7 +334,7 @@
                 var data = $(form).serialize() + '&id=' + Request._GET.id;
                 create_partial(type, mdCreate, table, data, btn);
             },
-            rules: rules(type)
+            rules: rules(type),
         });
     });
     var create_partial = function (type, mdCreate, table, data, btn) {
