@@ -127,9 +127,9 @@ class ManageController extends MainController {
                 $chacad->FReg       = date('Y-m-d h:i:s');
             }
 
-            if (!$chacad->save()) {
+            /*if (!$chacad->save()) {
                 throw new Exception('[Error al crear/actualizar datos en chacad] ' . Utils::getErrorsText($chacad->getErrors()), 900);
-            }
+            }*/
 
             $transaction->commit();
             $response['data']['id_user'] = $id_user;
