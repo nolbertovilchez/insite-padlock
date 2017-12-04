@@ -1,55 +1,112 @@
 (function ($) {
     'use-strict';
 
-    var $moduleUrl = (Request.Host + Request.BaseUrl + "/" + Request.UrlHash.m);
-    var $controlerUrl = $moduleUrl + "/" + Request.UrlHash.c;
     var $table = $('#tbUsers');
     var $btnAddUser = $('#add-user');
-    var $modalAddUser = $('#md-manage-create-user');
+    var $modalCheckUser = $('#md-manage-check-user');
+    var $modalCreateUser = $('#md-manage-create-user');
+
+    //$('.datepicker-2').datepicker();
 
     $btnAddUser.on('click', function () {
-        $modalAddUser.find('#form-create-user input,select').val('').removeClass('valid').removeClass('error');
-        $modalAddUser.find('#form-create-user label.error').remove();
-        $modalAddUser.modal({backdrop: 'static'}); // no cerrar el modal al hacer click fuera de el
+        $modalCheckUser.find('#form-check-user input,select').val('').removeClass('valid').removeClass('error');
+        $modalCheckUser.find('#form-check-user label.error').remove();
+        $modalCreateUser.find('#form-create-user input,select').val('').removeClass('valid').removeClass('error');
+        $modalCreateUser.find('#form-create-user label.error').remove();
+        $modalCreateUser.find('input[name^="identis[CodTMoti]"]').val('*');
+        $modalCheckUser.modal({backdrop: 'static'}); // no cerrar el modal al hacer click fuera de el
     });
 
-    $modalAddUser.find('#form-create-user').validate({
+    // formulario de chequear usuario
+    $modalCheckUser.find('#form-check-user').validate({
         submitHandler: function (form) {
             var btn = $(form).find('button[type=submit]');
-            var data = $(form).serialize();
-            create_user(data, btn);
+            var formArr = $(form).serializeArray();
+            $.each(formArr, function (i, field) {
+                formArr[i].value = $.trim(field.value);
+            });
+            var data = $.param(formArr);
+            check_user(data, btn);
         },
         rules: {
-            'cod_per': {
-                required: true,
-            },
-            'username': {
-                required: true,
-            },
-            'email': {
-                required: true,
-                email: true
-            }
+            'cod_per': {required: true}
         }
     });
 
-    var create_user = function (data, btn) {
-        btn.prop({disabled: true}).html('Cargando...');
-        var inputs = $modalAddUser.find('#form-create-user input');
-        //inputs.val('').removeClass('valid');
-        inputs.removeClass('valid');
-        inputs.attr("disabled", true);
+    // formulario de crear usuario
+    $modalCreateUser.find('#form-create-user').validate({
+        submitHandler: function (form) {
+            var btn = $(form).find('button[type=submit]');
+            var formArr = $(form).serializeArray();
+            $.each(formArr, function (i, field) {
+                formArr[i].value = $.trim(field.value);
+            });
+            var data = $.param(formArr);
+            create_user(data, btn);
+        },
+        rules: {
+            'identis[CodPer]': {required: true},
+            'identis[Nombres]': {required: true},
+            'identis[Ape1]': {required: true},
+            'identis[Ape2]': {required: true},
+            'contacto[telefono]': {required: true},
+            'contacto[email]': {required: true, email: true}
+        }
+    });
 
-        $.post(controllerUrl + '/save', data, function (response) {
-            console.log(response);
+    var update_form_with_chacad = function (data) {
+        var form = $modalCreateUser.find('#form-create-user');
+        form.find('input[name^="identis[CodIden]"]').val(data['CodIden']);
+        form.find('input[name^="identis[CodPer]"]').val(data['dni']);
+        form.find('input[name^="identis[Nombres]"]').val(data['Nombres']);
+        form.find('input[name^="identis[Ape1]"]').val(data['Ape1']);
+        form.find('input[name^="identis[Ape2]"]').val(data['Ape2']);
+        form.find('input[name^="identis[Sexo]"]').val(data['Sexo']);
+        form.find('input[name^="contacto[telefono]"]').val(data['telefono_personal']);
+        form.find('input[name^="contacto[email]"]').val(data['email_personal']);
+    };
+
+    var check_user = function (data, btn) {
+        btn.prop({disabled: true}).html('Cargando...');
+        $.post(controllerUrl + '/check', data, function (response) {
             if (!response.error) {
-                location.href = controllerUrl + '/edit?id=' + response.data.id;
+                var $id_user = response.data.id_user;
+                //chequear si existe
+                if (response.data.exist) {
+                    _confirm("<h5 class='text-center'>El usuario ya existe en padlock, ¿Desea ver su perfil?</h5>", function () {
+                        location.href = controllerUrl + '/edit?id=' + $id_user;
+                    }, function () {
+                        $modalCheckUser.modal('hide');
+                        $table.bootstrapTable('refresh');
+                    });
+                } else {
+                    $modalCheckUser.modal('hide');
+                    if (response.data.chacad.exist) {
+                        update_form_with_chacad(response.data.chacad.data);
+                    }
+                    $modalCreateUser.modal({backdrop: 'static'}); // no cerrar el modal al hacer click fuera de el
+                }
+                btn.prop({disabled: false}).html('Buscar');
             } else {
                 noty({type: 'error', text: response.message, timeout: 5000}).show();
-                inputs.attr("disabled", false);
+                btn.prop({disabled: false}).html('Buscar');
+            }
+        }, 'json').fail(function (xhr, status, error) {
+            if (xhr.status != 200) {
+                noty({type: 'error', text: xhr.responseText}).show();
+                btn.prop({disabled: false}).html('Buscar');
+            }
+        });
+    };
+
+    var create_user = function (data, btn) {
+        btn.prop({disabled: true}).html('Cargando...');
+        $.post(controllerUrl + '/save', data, function (response) {
+            if (!response.error) {
+                location.href = controllerUrl + '/edit?id=' + response.data.id_user;
+            } else {
+                noty({type: 'error', text: response.message, timeout: 5000}).show();
                 btn.prop({disabled: false}).html('Guardar');
-                $table.bootstrapTable('refresh');
-                //$modalAddUser.modal('hide');
             }
         }, 'json').fail(function (xhr, status, error) {
             if (xhr.status != 200) {
@@ -58,54 +115,5 @@
             }
         });
     };
-
-    var _action_buttons = function (value, row, index) {
-        return [
-            '<a class="edit" href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>'
-        ].join('');
-    };
-
-    var _action_edit = function (e, value, row, index) {
-        location.href = controllerUrl + '/edit?id=' + row.id_user;
-    };
-
-    var _columns = function () {
-        return  [
-            {
-                field: 'id_user',
-                title: 'ID',
-                align: 'center',
-                sortable: true,
-                width: '50px',
-            },
-            {field: 'cod_per', title: 'Código personal', align: 'center', sortable: true},
-            {field: 'id_type_user', title: 'Tipo de usuario', align: 'center', sortable: true},
-            {field: 'username', title: 'Username', sortable: true},
-            {field: 'state', title: 'Estado', align: 'center', sortable: true},
-            {field: 'state_user', title: 'Estado', align: 'center', sortable: true},
-            {
-                field: 'action',
-                title: 'Acciones',
-                align: 'center',
-                sortable: false,
-                width: '50px',
-                formatter: _action_buttons,
-                events: {
-                    'click .edit': _action_edit,
-                }
-            }
-        ];
-    };
-
-    $table.bootstrapTable({
-        escape: false,
-        locale: 'es-SP',
-        search: true,
-        pagination: true,
-        pageSize: 10,
-        idField: 'id',
-        url: controllerUrl + '/list',
-        columns: _columns()
-    });
 
 }(window.jQuery));

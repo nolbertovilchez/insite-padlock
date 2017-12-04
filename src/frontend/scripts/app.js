@@ -21,7 +21,8 @@ var _confirm = function (html, success, error, title, type) {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         cancelButtonText: 'Cancelar',
-        confirmButtonText: '<i class="fa fa-thumbs-o-up"></i> Estoy seguro de lo que hago.'
+        confirmButtonText: '<i class="fa fa-thumbs-o-up"></i> Estoy seguro de lo que hago.',
+        allowOutsideClick: false
     }).then((result) => {
         if (result.value) {
             if (typeof success != "undefined")
