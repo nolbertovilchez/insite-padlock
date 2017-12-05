@@ -38,7 +38,7 @@ class UserAsset {
         "manage.edit" => [
             "js"      => ["manage/edit"],
             "css"     => [],
-            "depends" => [],
+            "depends" => ['app\assets\GlobalAsset'],
         ]
     ];
 

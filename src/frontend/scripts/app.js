@@ -102,20 +102,3 @@ var reset_string = function (str) {
     }
     return ret.join('');
 };
-
-jQuery.extend(jQuery.validator.messages, {
-    required: "Este campo es obligatorio",
-    remote: "Por favor corrija este campo.",
-    email: "Por favor ingrese una direccion valida.",
-    url: "Por favor ingrese una URL valida.",
-    date: "Por favor ingrese una fecha valida.",
-    number: "Por favor ingrese un numero valido.",
-    digits: "Por favor ingrese solo digitos.",
-    equalTo: "Por favor ingrese el mismo valor de nuevo.",
-    maxlength: jQuery.validator.format("Por favor ingrese no mas que {0} caracteres."),
-    minlength: jQuery.validator.format("Por favor ingrese al menos {0} caracteres."),
-    rangelength: jQuery.validator.format("Por favor ingrese un valor entre {0} y {1} caracteres."),
-    range: jQuery.validator.format("Por favor ingrese un valor entre {0} y {1}."),
-    max: jQuery.validator.format("Por favor ingrese un valor menor o igual que {0}."),
-    min: jQuery.validator.format("Por favor ingrese un valor mayor o igual que {0}.")
-});
