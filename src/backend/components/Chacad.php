@@ -47,10 +47,13 @@ class Chacad {
 
     public static function getDatosPersonales($codPer) {
         $sql = "select 
-                    persona.CodPer as dni
+                    persona.CodIden
+                    ,persona.CodPer as dni
                     ,RTRIM(persona.Nombres) as Nombres
                     ,RTRIM(persona.Ape1) as Ape1
                     ,RTRIM(persona.Ape2) as Ape2
+                    ,persona.FNacio
+                    ,persona.Sexo
                     ,(RTRIM(persona.Nombres)+' '+RTRIM(persona.Ape1)+' '+RTRIM(persona.Ape2)) as nombre_persona
                     ,(select RTRIM(Valor) from dbo.MedioCom where CodPer = persona.CodPer and CodTCom = 'C1') as telefono_personal
                     ,(select RTRIM(Valor) from dbo.MedioCom where CodPer = persona.CodPer and CodTCom = 'E1') as email_personal
@@ -60,6 +63,13 @@ class Chacad {
         $command = Yii::$app->chacad->createCommand($sql);
         $data    = $command->queryOne();
 
+        return $data;
+    }
+
+    public static function generateIdentisCodIden() {
+        $sql     = "SELECT max(convert(int,codiden))+1 as CodeIden FROM dbo.identis WHERE CodIden<>'*****'";
+        $command = Yii::$app->chacad->createCommand($sql);
+        $data    = $command->queryScalar();
         return $data;
     }
 

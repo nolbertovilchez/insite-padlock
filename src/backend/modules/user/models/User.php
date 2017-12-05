@@ -33,12 +33,19 @@ class User extends \yii\db\ActiveRecord {
             [['id_type_user', 'state_user', 'state'], 'integer'],
             [['cod_per'], 'string', 'max' => 20],
             [['username', 'password'], 'string', 'max' => 100],
+            ['cod_per', 'validateCodPer', 'on' => 'create'],
             ['username', 'validateUsername', 'on' => 'create']
         ];
     }
+    
+    public function validateCodPer($attribute, $params, $validator) {
+        if (self::find()->where(['cod_per'=>$this->$attribute,'state'=>1])->one()) {
+            $this->addError($attribute, 'El cod_per ya existe.');
+        }
+    }
 
     public function validateUsername($attribute, $params, $validator) {
-        if (self::find()->where(['username' => $this->$attribute])->one()) {
+        if (self::find()->where(['username'=>$this->$attribute,'state'=>1])->one()) {
             $this->addError($attribute, 'El username ya existe.');
         }
     }

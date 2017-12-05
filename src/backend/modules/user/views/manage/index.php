@@ -19,4 +19,5 @@
     </div>
 </div>
 
+<?= $this->render("modals/check_user"); ?>
 <?= $this->render("modals/create_user"); ?>

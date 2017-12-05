@@ -151,4 +151,24 @@ class UApplication {
         return $data;
     }
 
+    public static function getAppsByUser($id_user) {
+        $data = QApplication::getAppsByUser($id_user);
+
+        foreach ($data as $key => $value) {
+            $chacad                       = Chacad::getDatosPersonales($value['cod_per']);
+            $data[$key]['nombre_persona'] = $chacad['nombre_persona'];
+            $data[$key]['type']           = "users";
+        }
+
+        return $data;
+    }
+
+    public static function getNoAppsByUser($id_user) {
+        $data = QApplication::getNoAppsByUser($id_user);
+
+//        foreach ($data as $key => $value) {
+//        }
+
+        return $data;
+    }
 }

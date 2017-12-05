@@ -71,6 +71,8 @@ class UsersController extends MainController {
 
             if (isset($user['id_app_user']) && $user['id_app_user'] != "") {
                 $model = ApplicationUser::findOne($user['id_app_user']);
+                ApplicationUserPermitAdditional::updateAll(['state' => 0], 'id_app_user = :id', [':id' => $user['id_app_user']]);
+                ApplicationUserPermitRestricted::updateAll(['state' => 0], 'id_app_user = :id', [':id' => $user['id_app_user']]);
             } else {
                 $model = new ApplicationUser();
             }
@@ -253,8 +255,8 @@ class UsersController extends MainController {
             if (!$model->save()) {
                 throw new Exception("Error al restringir accion al usuario - " . print_r($model->getErrors(), true), 900);
             }
-            
-            $id_accion   = Yii::$app->request->post("id_action");
+
+            $id_accion = Yii::$app->request->post("id_action");
 
             $transaction->commit();
 
@@ -291,5 +293,5 @@ class UsersController extends MainController {
             JSON::response(TRUE, $ex->getCode(), $ex->getMessage(), []);
         }
     }
-    
+
 }

@@ -29,14 +29,16 @@ class UserAsset {
      */
     public $action = [
         "manage.index" => [
-            "js"      => ["manage/index"],
+            "js"      => ["manage/index","manage/list"],
             "css"     => [],
-            "depends" => [],
+            "depends" => [
+                
+            ],
         ],
         "manage.edit" => [
             "js"      => ["manage/edit"],
             "css"     => [],
-            "depends" => [],
+            "depends" => ['app\assets\GlobalAsset'],
         ]
     ];
 
